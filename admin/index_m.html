@@ -1,0 +1,759 @@
+<html>
+
+<head>
+
+    <!-- Load ioBroker scripts and styles-->
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+    <!-- Load our own files -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src="words.js"></script>
+
+    <script type="text/javascript">
+      let valuesIn = [];
+      let valuesOut = [];
+
+      let namespaceIn = '';
+      let namespaceOut = '';
+
+      function processTasks(tasks, cb) {
+        console.log('tasks', tasks);
+        if (!tasks || !tasks.length) {
+          cb && cb();
+          return;
+        }
+
+        const task = tasks.pop();
+
+        if (typeof task === 'object') {
+          socket.emit('setObject', task._id, task, function (err) {
+            if (err) console.error(err);
+            setTimeout(function () {
+              processTasks(tasks, cb);
+            }, 0);
+          });
+        } else {
+          socket.emit('delState', task, function (err) {
+            if (err) console.error(err);
+            socket.emit('delObject', task, function (err) {
+              if (err) console.error(err);
+              setTimeout(function () {
+                processTasks(tasks, cb);
+              }, 0);
+            });
+          });
+        }
+      }
+
+      function editLine(id, line, callback) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        console.log('editLine', id, line, callback);
+      }
+
+      // This will be called by the admin adapter when the settings page loads
+      function load(settings, onChange) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        namespaceIn = adapter + '.' + instance + '.data.in.';
+        namespaceOut = adapter + '.' + instance + '.data.out.';
+
+        // example: select elements with id=key and class=value and insert value
+        if (!settings) return;
+        $('.value').each(function () {
+          const $key = $(this);
+          const id = $key.attr('id');
+          if ($key.attr('type') === 'checkbox') {
+            // do not call onChange direct, because onChange could expect some arguments
+            $key.prop('checked', settings[id])
+              .on('change', () => {
+                showHideSettings();
+                onChange();
+              })
+            ;
+          } else {
+            // do not call onChange direct, because onChange could expect some arguments
+            $key.val(settings[id])
+              .on('change', () => onChange())
+              .on('keyup', () => onChange())
+            ;
+          }
+        });
+
+        socket.emit('getObjectView', 'system', 'state', {startkey: namespaceIn, endkey: namespaceIn + '\u9999'}, function (err, res) {
+          if (!err && res) {
+            for (let i = 0; i < res.rows.length; i++) {
+              const obj = res.rows[i].value;
+              const line = {
+                name:          obj._id.substring(namespaceIn.length),
+                role:          obj.common.role,
+                type:          obj.common.type,
+                unit:          obj.common.unit,
+
+                fromAddress:   obj.native.fromAddress,
+                toAddress:     obj.native.toAddress,
+                data:          obj.native.data,
+                dataType:      obj.native.dataType,
+                factor:        obj.native.factor,
+                offset:        obj.native.offset,
+                decimals:      obj.native.decimals,
+                obj:           obj
+              };
+              valuesIn.push(line);
+            }
+          }
+
+          const newValues = JSON.parse(JSON.stringify(valuesIn));
+          values2table('values-in', newValues, onChange, () => {
+            // add change events
+            $('#values-in .values-input[data-name="name"], \
+               #values-in .values-input[data-name="role"], \
+               #values-in .values-input[data-name="fromAddress"], \
+               #values-in .values-input[data-name="toAddress"], \
+               #values-in .values-input[data-name="data"], \
+               #values-in .values-input[data-name="type"]')
+            .on('change', function () {
+              checkLineIn($(this).data('index'));
+            })
+            .on('keyup', function () {
+              checkLineIn($(this).data('index'));
+            });
+
+            // run initial check
+            $('#values-in tr[data-index]').each(function () {
+              checkLineIn($(this).data('index'));
+            });
+
+            showHideSettings();
+
+            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+            if (M) M.updateTextFields();
+          });
+
+        });
+
+        socket.emit('getObjectView', 'system', 'state', {startkey: namespaceOut, endkey: namespaceOut + '\u9999'}, function (err, res) {
+          if (!err && res) {
+            for (let i = 0; i < res.rows.length; i++) {
+              const obj = res.rows[i].value;
+              const line = {
+                name:          obj._id.substring(namespaceOut.length),
+                role:          obj.common.role,
+                type:          obj.common.type,
+                unit:          obj.common.unit,
+
+                toAddress:     obj.native.toAddress,
+                data:          obj.native.data,
+                dataType:      obj.native.dataType,
+                obj:           obj
+              };
+              valuesOut.push(line);
+            }
+          }
+
+          const newValues = JSON.parse(JSON.stringify(valuesOut));
+          values2table('values-out', newValues, onChange, () => {
+            // add change events
+            $('#values-out .values-input[data-name="name"], \
+               #values-out .values-input[data-name="role"], \
+               #values-out .values-input[data-name="toAddress"], \
+               #values-out .values-input[data-name="data"], \
+               #values-out .values-input[data-name="type"]')
+            .on('change', function () {
+              checkLineOut($(this).data('index'));
+            })
+            .on('keyup', function () {
+              checkLineOut($(this).data('index'));
+            });
+
+            // run initial check
+            $('#values-out tr[data-index]').each(function () {
+              checkLineOut($(this).data('index'));
+            });
+
+            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+            if (M) M.updateTextFields();
+          });
+
+        });
+
+        onChange(false);
+        showHideSettings();
+        // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+        if (M) M.updateTextFields();
+      }
+
+      function checkLineIn (id) {
+        let errorCount = 0;
+
+        const role = $('#values-in .values-input[data-name="role"][data-index="' + id + '"]').val();
+        const type = $('#values-in .values-input[data-name="type"][data-index="' + id + '"]').val();
+
+        if (role === 'button' || role === 'indecator' || role === 'switch') {
+          $('#values-in .values-input[data-name="type"][data-index="' + id + '"]').parent().hide();
+          $('#values-in .values-input[data-name="dataType"][data-index="' + id + '"]').parent().hide();
+          $('#values-in .values-input[data-name="factor"][data-index="' + id + '"]').hide();
+          $('#values-in .values-input[data-name="offset"][data-index="' + id + '"]').hide();
+          $('#values-in .values-input[data-name="decimals"][data-index="' + id + '"]').hide();
+          $('#values-in .values-input[data-name="unit"][data-index="' + id + '"]').hide();
+        } else {
+          $('#values-in .values-input[data-name="type"][data-index="' + id + '"]').parent().show();
+
+          if (type === 'number') {
+            $('#values-in .values-input[data-name="dataType"][data-index="' + id + '"]').parent().show();
+            $('#values-in .values-input[data-name="factor"][data-index="' + id + '"]').show();
+            $('#values-in .values-input[data-name="offset"][data-index="' + id + '"]').show();
+            $('#values-in .values-input[data-name="decimals"][data-index="' + id + '"]').show();
+            $('#values-in .values-input[data-name="unit"][data-index="' + id + '"]').show();
+          } else {
+            $('#values-in .values-input[data-name="dataType"][data-index="' + id + '"]').parent().hide();
+            $('#values-in .values-input[data-name="factor"][data-index="' + id + '"]').hide();
+            $('#values-in .values-input[data-name="offset"][data-index="' + id + '"]').hide();
+            $('#values-in .values-input[data-name="decimals"][data-index="' + id + '"]').hide();
+            $('#values-in .values-input[data-name="unit"][data-index="' + id + '"]').hide();
+          }
+        }
+
+        const $name = $('#values-in .values-input[data-name="name"][data-index="' + id + '"]');
+        if (!$name.val()) {
+          setError($name, 'Empty names are not allowed');
+          errorCount++;
+        } else {
+          setError($name, false);
+        }
+
+        const $fromAddress = $('#values-in .values-input[data-name="fromAddress"][data-index="' + id + '"]');
+        if (isValidAddress($fromAddress.val(), true)) {
+          setError($fromAddress, false);
+        } else {
+          setError($fromAddress, 'Invalid address');
+          errorCount++;
+        }
+
+        const $toAddress = $('#values-in .values-input[data-name="toAddress"][data-index="' + id + '"]');
+        if (isValidAddress($toAddress.val(), true)) {
+          setError($toAddress, false);
+        } else {
+          setError($toAddress, 'Invalid address');
+          errorCount++;
+        }
+
+        const $data = $('#values-in .values-input[data-name="data"][data-index="' + id + '"]');
+        let regex;
+        switch (role) {
+          case 'button':
+            regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}|\*),)*(\d{1,3}|0x[a-fA-F0-9]{2}|\*)$/;
+            break;
+          case 'switch':
+          case 'indecator':
+            regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}|\*),)*(\d{1,3}|0x[a-fA-F0-9]{2}|\*)(;((\d{1,3}|0x[a-fA-F0-9]{2}|\*),)*(\d{1,3}|0x[a-fA-F0-9]{2}|\*))?$/;
+            break;
+          default:
+            regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}|\*|D),)*(\d{1,3}|0x[a-fA-F0-9]{2}|\*|D)$/;
+        }
+        if ($data.val().match(regex)) {
+          setError($data, false);
+        } else {
+          setError($data, 'Invalid data');
+          errorCount++;
+        }
+
+        return errorCount;
+      }
+
+      function checkLineOut (id) {
+        let errorCount = 0;
+
+        const role = $('#values-out .values-input[data-name="role"][data-index="' + id + '"]').val();
+        const type = $('#values-out .values-input[data-name="type"][data-index="' + id + '"]').val();
+
+        if (role === 'button' || role === 'indecator' || role === 'switch') {
+          $('#values-out .values-input[data-name="type"][data-index="' + id + '"]').parent().hide();
+          $('#values-out .values-input[data-name="dataType"][data-index="' + id + '"]').parent().hide();
+          $('#values-out .values-input[data-name="unit"][data-index="' + id + '"]').hide();
+        } else {
+          $('#values-out .values-input[data-name="type"][data-index="' + id + '"]').parent().show();
+
+          if (type === 'number') {
+            $('#values-out .values-input[data-name="dataType"][data-index="' + id + '"]').parent().show();
+            $('#values-out .values-input[data-name="unit"][data-index="' + id + '"]').show();
+          } else {
+            $('#values-out .values-input[data-name="dataType"][data-index="' + id + '"]').parent().hide();
+            $('#values-out .values-input[data-name="unit"][data-index="' + id + '"]').hide();
+          }
+        }
+
+        const $name = $('#values-out .values-input[data-name="name"][data-index="' + id + '"]');
+        if (!$name.val()) {
+          setError($name, 'Empty names are not allowed');
+          errorCount++;
+        } else {
+          setError($name, false);
+        }
+
+        const $toAddress = $('#values-out .values-input[data-name="toAddress"][data-index="' + id + '"]');
+        if (isValidAddress($toAddress.val(), false)) {
+          setError($toAddress, false);
+        } else {
+          setError($toAddress, 'Invalid address');
+          errorCount++;
+        }
+
+        const $data = $('#values-out .values-input[data-name="data"][data-index="' + id + '"]');
+        let regex;
+        switch (role) {
+          case 'button':
+            regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}),)*(\d{1,3}|0x[a-fA-F0-9]{2})$/;
+            break;
+          case 'switch':
+          case 'indecator':
+            regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}),)*(\d{1,3}|0x[a-fA-F0-9]{2})(;((\d{1,3}|0x[a-fA-F0-9]{2}),)*(\d{1,3}|0x[a-fA-F0-9]{2}))?$/;
+            break;
+          default:
+            regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}|D),)*(\d{1,3}|0x[a-fA-F0-9]{2}|D)$/;
+        }
+        if ($data.val().match(regex)) {
+          setError($data, false);
+        } else {
+          setError($data, 'Invalid data');
+          errorCount++;
+        }
+
+        return errorCount;
+      }
+
+      function isValidAddress (val, allowWildcard) {
+        // allow wildcard
+        if (allowWildcard && val === '*') {
+          return true;
+        }
+
+        if (!val.match(/^(\d{1,3}|0x[a-fA-F0-9]{2})$/)) {
+          return false;
+        }
+
+        if (val.startsWith('0x')) {
+          // hex
+          val = parseInt(val, 16);
+        } else {
+          // dezimal
+          val = parseInt(val, 10);
+        }
+
+        return !(isNaN(val) || val < 0 || val > 255);
+      }
+
+      function setError($elem, error) {
+        if (error) {
+          $elem.addClass('error').attr('title', _(error));
+        } else {
+          $elem.removeClass('error').attr('title', '');
+        }
+      }
+
+      // This will be called by the admin adapter when the user presses the save button
+      function save(callback) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        // example: select elements with class=value and build settings object
+        const obj = {};
+        $('.value').each(function () {
+          const $this = $(this);
+          if ($this.attr('type') === 'checkbox') {
+            obj[$this.attr('id')] = $this.prop('checked');
+          } else {
+            obj[$this.attr('id')] = $this.val();
+          }
+        });
+
+        if (!$('#port').val().length) {
+          showMessage(_('Empty port is not allowed'), _('Error'), 'alert');
+          return;
+        }
+
+        let errorCount = 0;
+        $('#values-in tr[data-index]').each(function () {
+          errorCount += checkLineIn($(this).data('index'));
+        });
+        $('#values-out tr[data-index]').each(function () {
+          errorCount += checkLineOut($(this).data('index'));
+        });
+
+        if (errorCount > 0) {
+          showMessage(_('Something seems to be wrong. Please check the highlighted fields.'), _('Error'), 'alert');
+          return;
+        }
+
+        const newValuesIn = table2values('values-in');
+        const newValuesOut = table2values('values-out');
+        const tasks = [];
+        const namesIn = [];
+        const namesOut = [];
+
+        for (let v = 0; v < newValuesIn.length; v++) {
+          if (namesIn.indexOf(newValuesIn[v].name) !== -1) {
+            showError(_('Duplicate names are not allowed'));
+            return;
+          }
+          namesIn.push(newValuesIn[v].name);
+          let found = false;
+          let t;
+          // find same name in old valuesIn
+          for (t = 0; t < valuesIn.length; t++) {
+            if (valuesIn[t].name === newValuesIn[v].name) {
+              found = true;
+              break;
+            }
+          }
+
+          switch (newValuesIn[v].role) {
+            case 'button':
+            case 'indecator':
+            case 'switch':
+              newValuesIn[v].type = 'boolean';
+              newValuesIn[v].dataType = 'uint8';
+              break;
+          }
+
+          if (typeof newValuesIn[v].factor === 'string') {
+            newValuesIn[v].factor = newValuesIn[v].factor.replace(',', '.');
+          }
+          if (typeof newValuesIn[v].offset === 'string') {
+            newValuesIn[v].offset = newValuesIn[v].offset.replace(',', '.');
+          }
+          if (typeof newValuesIn[v].decimals === 'string') {
+            newValuesIn[v].decimals = newValuesIn[v].decimals.replace(',', '.');
+          }
+
+          newValuesIn[v].offset = parseFloat(newValuesIn[v].offset) || 0;
+          newValuesIn[v].factor = parseFloat(newValuesIn[v].factor) || 1;
+          newValuesIn[v].decimals = parseInt(newValuesIn[v].decimals, 10) || 2;
+
+          if (found) {
+            const _obj = valuesIn[t].obj;
+            let changed = false;
+            if (_obj.common.unit !== newValuesIn[v].unit) {
+              _obj.common.unit = newValuesIn[v].unit;
+              changed = true;
+            }
+            if (_obj.common.role !== newValuesIn[v].role) {
+              _obj.common.role = newValuesIn[v].role;
+              changed = true;
+            }
+            if (_obj.native.fromAddress !== newValuesIn[v].fromAddress) {
+              _obj.native.fromAddress = newValuesIn[v].fromAddress;
+              changed = true;
+            }
+            if (_obj.native.toAddress !== newValuesIn[v].toAddress) {
+              _obj.native.toAddress = newValuesIn[v].toAddress;
+              changed = true;
+            }
+            if (_obj.native.data !== newValuesIn[v].data) {
+              _obj.native.data = newValuesIn[v].data;
+              changed = true;
+            }
+            if (_obj.native.dataType !== newValuesIn[v].dataType) {
+              _obj.native.dataType = newValuesIn[v].dataType;
+              changed = true;
+            }
+            if (_obj.native.factor !== newValuesIn[v].factor) {
+              _obj.native.factor = newValuesIn[v].factor;
+              changed = true;
+            }
+            if (_obj.native.offset !== newValuesIn[v].offset) {
+              _obj.native.offset = newValuesIn[v].offset;
+              changed = true;
+            }
+            if (_obj.native.decimals !== newValuesIn[v].decimals) {
+              _obj.native.decimals = newValuesIn[v].decimals;
+              changed = true;
+            }
+            newValuesIn[v].obj = _obj;
+            if (changed) tasks.push(_obj);
+          } else {
+            const _obj = {
+              _id:              namespaceIn + newValuesIn[v].name.replace(/[()\[\]\\\/*?\s]/g, '_'),
+              common: {
+                name:           newValuesIn[v].name,
+                write:          false,
+                read:           true,
+                unit:           newValuesIn[v].unit,
+                type:           newValuesIn[v].type,
+                role:           newValuesIn[v].role
+              },
+              native: {
+                fromAddress:    newValuesIn[v].fromAddress,
+                toAddress:      newValuesIn[v].toAddress,
+                data:           newValuesIn[v].data,
+                dataType:       newValuesIn[v].dataType,
+                factor:         newValuesIn[v].factor,
+                offset:         newValuesIn[v].offset,
+                decimals:         newValuesIn[v].decimals
+              },
+              type: 'state'
+            };
+            newValuesIn[v].obj = _obj;
+            tasks.push(_obj);
+          }
+        }
+        for (let w = 0; w < valuesIn.length; w++) {
+          let found = false;
+          for (let k = 0; k < newValuesIn.length; k++) {
+            if (valuesIn[w].name === newValuesIn[k].name) {
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            tasks.push(valuesIn[w].obj._id);
+          }
+        }
+
+        for (let v = 0; v < newValuesOut.length; v++) {
+          if (namesOut.indexOf(newValuesOut[v].name) !== -1) {
+            showError(_('Duplicate names are not allowed'));
+            return;
+          }
+          namesOut.push(newValuesOut[v].name);
+          let found = false;
+          let t;
+          // find same name in old valuesOut
+          for (t = 0; t < valuesOut.length; t++) {
+            if (valuesOut[t].name === newValuesOut[v].name) {
+              found = true;
+              break;
+            }
+          }
+
+          switch (newValuesOut[v].role) {
+            case 'button':
+            case 'indecator':
+            case 'switch':
+              newValuesOut[v].type = 'boolean';
+              newValuesOut[v].dataType = 'uint8';
+              break;
+          }
+
+          if (found) {
+            const _obj = valuesOut[t].obj;
+            let changed = false;
+            if (_obj.common.unit !== newValuesOut[v].unit) {
+              _obj.common.unit = newValuesOut[v].unit;
+              changed = true;
+            }
+            if (_obj.common.role !== newValuesOut[v].role) {
+              _obj.common.role = newValuesOut[v].role;
+              changed = true;
+            }
+            if (_obj.native.toAddress !== newValuesOut[v].toAddress) {
+              _obj.native.toAddress = newValuesOut[v].toAddress;
+              changed = true;
+            }
+            if (_obj.native.data !== newValuesOut[v].data) {
+              _obj.native.data = newValuesOut[v].data;
+              changed = true;
+            }
+            if (_obj.native.dataType !== newValuesOut[v].dataType) {
+              _obj.native.dataType = newValuesOut[v].dataType;
+              changed = true;
+            }
+            newValuesOut[v].obj = _obj;
+            if (changed) tasks.push(_obj);
+          } else {
+            const _obj = {
+              _id:              namespaceOut + newValuesOut[v].name.replace(/[()\[\]\\\/*?\s]/g, '_'),
+              common: {
+                name:           newValuesOut[v].name,
+                write:          true,
+                read:           true,
+                unit:           newValuesOut[v].unit,
+                type:           newValuesOut[v].type,
+                role:           newValuesOut[v].role
+              },
+              native: {
+                toAddress:      newValuesOut[v].toAddress,
+                data:           newValuesOut[v].data,
+                dataType:       newValuesOut[v].dataType
+              },
+              type: 'state'
+            };
+            newValuesOut[v].obj = _obj;
+            tasks.push(_obj);
+          }
+        }
+        for (let w = 0; w < valuesOut.length; w++) {
+          let found = false;
+          for (let k = 0; k < newValuesOut.length; k++) {
+            if (valuesOut[w].name === newValuesOut[k].name) {
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            tasks.push(valuesOut[w].obj._id);
+          }
+        }
+
+        // save in and out for config save and restore
+        obj['_in'] = newValuesIn;
+        obj['_out'] = newValuesOut;
+
+        processTasks(tasks, function () {
+          valuesIn = newValuesIn;
+          valuesOut = newValuesOut;
+          callback(obj);
+        });
+      }
+
+      function showHideSettings () {
+
+        if ($('#reliable').prop('checked')) {
+          $('.reliable-only').show();
+        } else {
+          $('.reliable-only').hide();
+        }
+
+        /*if ($('#promiscuous').prop('checked')) {
+          $('#values-in th[data-name="toAddress"]').show();
+          $('#values-in .values-input[data-name="toAddress"]').parent().show();
+        } else {
+          $('#values-in th[data-name="toAddress"]').hide();
+          $('#values-in .values-input[data-name="toAddress"]').parent().hide();
+        }*/
+      }
+
+    </script>
+
+</head>
+<body>
+<div class="m adapter-container">
+
+  <div class="col s12">
+    <ul class="tabs">
+      <li class="tab col s4"><a href="#tab-main" class="translate active">Main settings</a></li>
+      <li class="tab col s4"><a href="#tab-in" class="translate">Incoming data</a></li>
+      <li class="tab col s4"><a href="#tab-out" class="translate">Outgoing data</a></li>
+    </ul>
+  </div>
+  <div class="row">
+    <div class="col s12 m4 l2">
+      <img src="radiohead.png" class="logo">
+    </div>
+  </div>
+
+  <!-- main settings -->
+  <div id="tab-main">
+    <div class="row">
+      <div class="input-field col s12 m6 l4">
+        <input type="text" id="port" class="value" />
+        <label class="translate" for="port">Serial port</label>
+        <span class="translate">e.g.</span> <code>/dev/ttyUSB0</code>
+      </div>
+      <div class="input-field col s12 m6 l4">
+        <input type="number" id="baud" class="value" min="300" max="256000" />
+        <label class="translate" for="baud">Baud rate</label>
+      </div>
+        <div class="input-field col s12 m6 l4">
+          <input type="text" id="address" class="value" />
+          <label class="translate" for="address">Address</label>
+          <span class="translate">The address of this node in the RadioHead network. May be given as hex number (0x00 to 0xFE) or decimal number (0 to 254).</span>
+        </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12 m6 l4">
+        <input type="checkbox" id="reliable" class="value" />
+        <label class="translate" for="reliable">Reliable mode</label><br />
+        <span class="translate">Use <code>RHReliableDatagram</code> instead of <code>RHDatagram</code>.</span>
+      </div>
+      <div class="input-field col s12 m6 l4 reliable-only">
+        <input type="number" id="retries" class="value" min="0" />
+        <label class="translate" for="retries">Retries</label>
+        <span class="translate">Number of retries for each meaasge to be sent. Default is 3. Set to 0 for no retrys.</span>
+      </div>
+      <div class="input-field col s12 m6 l4 reliable-only">
+        <input type="number" id="timeout" class="value" min="0" />
+        <label class="translate" for="timeout">Timeout</label>
+        <span class="translate">Timeout while waiting for an ack for each sent meaasge. Default is 200.</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12 m6 l4">
+        <input type="checkbox" id="promiscuous" class="value" />
+        <label class="translate" for="promiscuous">Promiscuous mode</label><br />
+        <span class="translate">In promiscuous mode, messages addressed to an any node can be received. Remember to set the <code>toAddress</code> for incoming data if enabled.</span>
+      </div>
+      <div class="input-field col s12 m6 l4">
+        <input type="checkbox" id="logAllData" class="value" />
+        <label class="translate" for="logAllData">Log all data</label><br />
+        <span class="translate">When enabled, every received and sent message will be logged.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- incoming data -->
+  <div id="tab-in">
+    <div class="row">
+      <div class="col s12" id="values-in">
+        <span style="font-size: larger;" class="translate">Add entry</span>: <a class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+        <div class="table-values-div">
+          <table class="table-values">
+            <thead>
+            <tr>
+              <th data-name="_index"     style="width:30px"></th>
+              <th data-name="name"       style="width:110px" data-style="width: 110px" class="translate">Name</th>
+              <th data-name="role"       style="width:120px"  data-type="select" data-default="state" data-options="state/default;/custom;temperature;value;blinds;switch;button;indicator" class="translate">Role</th>
+              <th data-name="fromAddress" style="width:110px" class="translate">From adress</th>
+              <th data-name="toAddress"   style="width:110px" class="translate" data-default="*">To adress</th>
+              <th data-name="data"        class="translate">Data</th>
+              <th data-name="type"        style="width:110px" data-type="select" data-default="number" data-options="boolean;number" class="translate">Type</th>
+              <th data-name="dataType"    style="width:130px" data-type="select" data-default="uint8" data-options="int8;uint8;int16_le;int16_be;uint16_le;uint16_be;int32_le;int32_be;uint32_le;uint32_be;float32_le;float32_be;double64_le;double64_be" class="translate">Data type</th>
+              <th data-name="unit"        style="width:60px" class="translate">Unit</th>
+              <th data-name="factor"      style="width:60px" class="translate" data-default="1">Factor</th>
+              <th data-name="offset"      style="width:60px" class="translate" data-default="0">Offset</th>
+              <th data-name="decimals"      style="width:60px" class="translate" data-type="number" data-default="2">Decimals</th>
+              <th data-buttons="delete copy" style="width:80px"></th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 translate"><em>Hint:</em> Click on the ?-button at the top to get help and some examples.</div>
+    </div>
+  </div>
+
+  <!-- outgoing data -->
+  <div id="tab-out">
+    <div class="row">
+      <div class="col s12" id="values-out">
+        <span style="font-size: larger;" class="translate">Add entry</span>: <a class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+        <div class="table-values-div">
+          <table class="table-values">
+            <thead>
+            <tr>
+              <th data-name="_index"     style="width:30px"></th>
+              <th data-name="name"       style="width:110px" data-style="width: 110px" class="translate">Name</th>
+              <th data-name="role"       style="width:120px"  data-type="select" data-default="state" data-options="state/default;/custom;temperature;value;blinds;switch;button;indicator" class="translate">Role</th>
+              <th data-name="toAddress"   style="width:110px" class="translate">To adress</th>
+              <th data-name="data"        class="translate">Data</th>
+              <th data-name="type"        style="width:110px" data-type="select" data-default="number" data-options="boolean;number" class="translate">Type</th>
+              <th data-name="dataType"    style="width:130px" data-type="select" data-default="uint8" data-options="int8;uint8;int16_le;int16_be;uint16_le;uint16_be;int32_le;int32_be;uint32_le;uint32_be;float32_le;float32_be;double64_le;double64_be" class="translate">Data type</th>
+              <th data-name="unit"        style="width:60px" class="translate">Unit</th>
+              <th data-buttons="delete copy" style="width:80px"></th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 translate"><em>Hint:</em> Click on the ?-button at the top to get help and some examples.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

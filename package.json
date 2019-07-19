@@ -1,0 +1,71 @@
+{
+  "name": "iobroker.radiohead",
+  "version": "0.0.1",
+  "description": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
+  "author": {
+    "name": "Peter Müller",
+    "email": "peter@crycode.de"
+  },
+  "homepage": "https://github.com/crycode-de/ioBroker.radiohead",
+  "license": "GPL-2.0",
+  "keywords": [
+    "radiohead",
+    "serial",
+    "wireless"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crycode-de/ioBroker.radiohead"
+  },
+  "dependencies": {
+    "@iobroker/adapter-core": "^1.0.3",
+    "core-decorators": "^0.20.0",
+    "radiohead-serial": ">=4.0.1"
+  },
+  "devDependencies": {
+    "@iobroker/testing": "^1.2.5",
+    "@types/bluebird": "^3.5.27",
+    "@types/chai": "^4.1.7",
+    "@types/chai-as-promised": "^7.1.0",
+    "@types/gulp": "^4.0.6",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.14.12",
+    "@types/proxyquire": "^1.3.28",
+    "@types/sinon": "^7.0.13",
+    "@types/sinon-chai": "^3.2.2",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "axios": "^0.19.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^6.0.1",
+    "eslint-plugin-html": "^6.0.0",
+    "gulp": "^4.0.2",
+    "mocha": "^6.1.4",
+    "proxyquire": "^2.1.0",
+    "rimraf": "^2.6.3",
+    "sinon": "^7.3.2",
+    "sinon-chai": "^3.3.0",
+    "source-map-support": "^0.5.12",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  },
+  "main": "build/main.js",
+  "scripts": {
+    "prebuild": "rimraf ./build",
+    "build:ts": "tsc -p tsconfig.build.json",
+    "build": "npm run build:ts",
+    "watch:ts": "tsc -p tsconfig.build.json --watch",
+    "watch": "npm run watch:ts",
+    "test:ts": "mocha --opts test/mocha.custom.opts",
+    "test:package": "mocha test/package --exit",
+    "test:unit": "mocha test/unit --exit",
+    "test:integration": "mocha test/integration --exit",
+    "test": "npm run test:ts && npm run test:package",
+    "lint": "eslint --ext .ts src"
+  },
+  "bugs": {
+    "url": "https://github.com/crycode-de/ioBroker.radiohead/issues"
+  },
+  "readmeFilename": "README.md"
+}

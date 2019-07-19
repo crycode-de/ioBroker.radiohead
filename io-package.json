@@ -1,0 +1,256 @@
+{
+    "common": {
+        "name": "radiohead",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Radiohead",
+        "titleLang": {
+            "en": "Radiohead",
+            "de": "Radiohead",
+            "ru": "Radiohead",
+            "pt": "Radiohead",
+            "nl": "Radiohead",
+            "fr": "Radiohead",
+            "it": "Radiohead",
+            "es": "Radiohead",
+            "pl": "Radiohead",
+            "zh-cn": "Radiohead"
+        },
+        "desc": {
+            "en": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
+            "de": "Dies ist ein ioBroker-Adapter zur Integration eines RadioHead-Netzwerks über eine serielle Schnittstelle.",
+            "ru": "Это адаптер ioBroker для интеграции сети RadioHead с использованием последовательного интерфейса.",
+            "pt": "Este é um adaptador ioBroker para integrar uma rede RadioHead usando uma interface serial.",
+            "nl": "Dit is een ioBroker-adapter om een ​​RadioHead-netwerk te integreren met behulp van een seriële interface.",
+            "fr": "Il s'agit d'un adaptateur ioBroker permettant d'intégrer un réseau RadioHead utilisant une interface série.",
+            "it": "Questo è un adattatore ioBroker per integrare una rete RadioHead utilizzando un'interfaccia seriale.",
+            "es": "Este es un ioBroker-Adapter para integrar una red RadioHead usando una interfaz serial.",
+            "pl": "Jest to adapter ioBroker do integracji sieci RadioHead za pomocą interfejsu szeregowego.",
+            "zh-cn": "这是一个使用串行接口集成RadioHead网络的ioBroker-Adapter。"
+        },
+        "authors": [
+            "Peter Müller <peter@crycode.de>"
+        ],
+        "keywords": [
+            "radiohead",
+            "serial",
+            "wireless",
+            "RHSerial",
+            "RHDatagram",
+            "RHReliableDatagram"
+        ],
+        "license": "GPL-2.0",
+        "platform": "Javascript/Node.js",
+        "main": "build/main.js",
+        "icon": "radiohead.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/crycode-de/ioBroker.radiohead/master/admin/radiohead.png",
+        "readme": "https://github.com/crycode-de/ioBroker.radiohead/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "protocols",
+        "compact": true,
+        "materialize": true,
+        "messagebox": true,
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            }
+        ]
+    },
+    "native": {
+        "port": "",
+        "baud": 9600,
+        "address": "0x01",
+        "reliable": true,
+        "retries": 3,
+        "timeout": 200,
+        "promiscuous": false,
+        "debug": false
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Serial port opened",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.sentOkCount",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "Count of successfully sent messages",
+                "type": "number",
+                "read": true,
+                "write": false,
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.sentErrorCount",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "Count of faulty sent messages",
+                "type": "number",
+                "read": true,
+                "write": false,
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.receivedCount",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "Count of received message",
+                "type": "number",
+                "read": true,
+                "write": false,
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.retransmissionsCount",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "Count of retransmitted messages",
+                "type": "number",
+                "read": true,
+                "write": false,
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.lastSentOk",
+            "type": "state",
+            "common": {
+                "role": "value.datetime",
+                "name": "Timestamp when the last message was successfully sent",
+                "type": "string",
+                "read": true,
+                "write": false,
+                "def": ""
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.lastSentError",
+            "type": "state",
+            "common": {
+                "role": "value.datetime",
+                "name": "Timestamp when the last message was faulty sent",
+                "type": "string",
+                "read": true,
+                "write": false,
+                "def": ""
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.lastReceived",
+            "type": "state",
+            "common": {
+                "role": "value.datetime",
+                "name": "Timestamp when the last message was received",
+                "type": "string",
+                "read": true,
+                "write": false,
+                "def": ""
+            },
+            "native": {}
+        },
+        {
+            "_id": "actions",
+            "type": "channel",
+            "common": {
+                "name": "Actions"
+            },
+            "native": {}
+        },
+        {
+            "_id": "actions.resetCounters",
+            "type": "state",
+            "common": {
+                "role": "button",
+                "name": "Reset the information counters",
+                "type": "boolean",
+                "read": false,
+                "write": true,
+                "def": true
+            },
+            "native": {}
+        },
+        {
+            "_id": "data",
+            "type": "device",
+            "common": {
+                "name": "The data"
+            },
+            "native": {}
+        },
+        {
+            "_id": "data.in",
+            "type": "channel",
+            "common": {
+                "name": "Incomming data"
+            },
+            "native": {}
+        },
+        {
+            "_id": "data.out",
+            "type": "channel",
+            "common": {
+                "name": "Outgoing data"
+            },
+            "native": {}
+        },
+        {
+            "_id": "data.incoming",
+            "type": "state",
+            "common": {
+                "role": "state",
+                "name": "Last received RadioHead message",
+                "type": "object",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        }
+    ]
+}
