@@ -73,10 +73,24 @@ class RadioheadAdapter extends utils.Adapter {
                 this.log.warn(`No serial port defined! Adapter will not work...`);
                 return;
             }
-            this.rhs = new radiohead_serial_1.RadioHeadSerial(this.config.port, parseInt(this.config.baud, 10), this.address, this.config.reliable);
-            this.rhs.on('error', this.onRhsError);
-            this.rhs.on('init-done', this.onRhsInitDone);
-            this.rhs.on('data', this.onRhsData);
+            try {
+                this.rhs = new radiohead_serial_1.RadioHeadSerial({
+                    port: this.config.port,
+                    baud: parseInt(this.config.baud, 10),
+                    address: this.address,
+                    reliable: this.config.reliable,
+                    autoInit: false
+                });
+                this.rhs.on('error', this.onRhsError);
+                this.rhs.on('init-done', this.onRhsInitDone);
+                this.rhs.on('data', this.onRhsData);
+                yield this.rhs.init();
+            }
+            catch (err) {
+                this.log.warn(`Error on seral port init: ` + err);
+                this.log.warn(`Adapter will not work...`);
+                return;
+            }
             // in this template all states changes inside the adapters namespace are subscribed
             this.subscribeStates('actions.*');
             //this.subscribeStates('data.in.*');
