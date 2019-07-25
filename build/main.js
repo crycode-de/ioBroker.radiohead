@@ -23,19 +23,50 @@ const radiohead_serial_1 = require("radiohead-serial");
 const tools_1 = require("./lib/tools");
 const infoCounters = ['receivedCount', 'retransmissionsCount', 'sentErrorCount', 'sentOkCount'];
 class RadioheadAdapter extends utils.Adapter {
+    /**
+     * Constructor to create a new instance of the adapter.
+     * @param options The adapter options.
+     */
     constructor(options = {}) {
         super(Object.assign({}, options, { name: 'radiohead' }));
+        /**
+         * Address of this instance in the RadioHead network.
+         */
         this.address = 0x00;
+        /**
+         * Instance of the used RadioHeadSerial class
+         * or `null` if not initialized.
+         */
         this.rhs = null;
+        /**
+         * Conuter for received RadioHead messages.
+         */
         this.receivedCount = 0;
+        /**
+         * Counter for retransmitted RadioHead messages.
+         */
         this.retransmissionsCount = 0;
+        /**
+         * Counter for falsy sent / not sent RadioHead messages.
+         */
         this.sentErrorCount = 0;
+        /**
+         * Counter for successfully sent RadioHead messages.
+         */
         this.sentOkCount = 0;
         /**
          * Internal storage for the retransmissions counter on instance start.
+         * Used to calculate the total retransmissions count.
          */
         this.retransmissionsCountStart = 0;
+        /**
+         * Array of Objects for the incoming data matcher.
+         */
         this.incomingMatches = [];
+        /**
+         * Object containing a mapping of objectIDs and the data to send for
+         * outgoing data.
+         */
         this.outgoingMatches = {};
         this.on('ready', this.onReady);
         this.on('objectChange', this.onObjectChange);
@@ -48,15 +79,17 @@ class RadioheadAdapter extends utils.Adapter {
      */
     onReady() {
         return __awaiter(this, void 0, void 0, function* () {
-            // Initialize your adapter here
             // Reset the connection indicator during startup
             this.setState('info.connection', false, true);
+            // Debug log the current config
             this.log.debug('config: ' + JSON.stringify(this.config));
+            // Parse and check the address of the adapter in the RadioHead network
             this.address = tools_1.parseNumber(this.config.address);
             if (isNaN(this.address) || this.address < 0 || this.address > 254) {
                 this.log.error(`Config error: Invalid address ${this.config.address} (${this.address})!`);
                 return;
             }
+            // Load/initialize the info counters
             for (const id of infoCounters) {
                 const state = yield this.getStateAsync('info.' + id);
                 this.log.debug(`loaded ${this.namespace}.info.${id} ` + JSON.stringify(state));
@@ -67,12 +100,68 @@ class RadioheadAdapter extends utils.Adapter {
                     yield this.setStateAsync('info.' + id, 0, true);
                 }
             }
+            // setup matcher for incoming data
+            this.getForeignObjects(this.namespace + '.data.in.*', 'state', (err, objects) => {
+                if (err) {
+                    this.log.error('error loading incoming data objects');
+                    return;
+                }
+                for (const objectId in objects) {
+                    const obj = objects[objectId];
+                    const parts = obj.native.data.split(';');
+                    parts.forEach((part, partIdx) => {
+                        if (part.length === 0) {
+                            this.log.warn(`empty data part #${partIdx} in object ${objectId} ignored`);
+                            return;
+                        }
+                        const data = part.trim().split(',');
+                        const dataMatch = {
+                            from: tools_1.parseAddress(obj.native.fromAddress),
+                            to: this.config.promiscuous ? tools_1.parseAddress(obj.native.toAddress) : null,
+                            data: this.prepareDataForMatcher(data),
+                            objectId: objectId,
+                            role: obj.common.role,
+                            type: obj.common.type || 'number',
+                            numParts: parts.length,
+                            matchedPart: partIdx,
+                            bufferDataType: obj.native.dataType,
+                            bufferDataStart: data.indexOf('D'),
+                            factor: obj.native.factor,
+                            offset: obj.native.offset,
+                            decimals: obj.native.decimals
+                        };
+                        this.incomingMatches.push(dataMatch);
+                    });
+                }
+                this.log.debug(`loaded ${this.incomingMatches.length} incoming matches`);
+            });
+            // setup mapping for outgoing data
+            this.getForeignObjects(this.namespace + '.data.out.*', 'state', (err, objects) => {
+                if (err) {
+                    this.log.error('error loading outgoing data objects');
+                    return;
+                }
+                for (const objectId in objects) {
+                    const obj = objects[objectId];
+                    const parts = obj.native.data.split(';').map((p) => p.trim().split(','));
+                    const data = [];
+                    parts.forEach((part) => {
+                        data.push(this.prepareDataForMatcher(part));
+                    });
+                    this.outgoingMatches[objectId] = {
+                        to: tools_1.parseAddress(obj.native.toAddress) || 0,
+                        data: data.map((d) => Buffer.from(d)),
+                        role: obj.common.role,
+                        type: obj.common.type || 'number',
+                        bufferDataType: obj.native.dataType,
+                        bufferDataStart: parts[0].indexOf('D')
+                    };
+                }
+                this.log.debug(`loaded ${Object.keys(this.outgoingMatches).length} outgoing matches`);
+            });
             // set the start value for retransmissions counter
             this.retransmissionsCountStart = this.retransmissionsCount;
-            if (!this.config.port) {
-                this.log.warn(`No serial port defined! Adapter will not work...`);
-                return;
-            }
+            // Init the radiohead-serial and catch/log possible errors
             try {
                 this.rhs = new radiohead_serial_1.RadioHeadSerial({
                     port: this.config.port,
@@ -89,11 +178,11 @@ class RadioheadAdapter extends utils.Adapter {
             catch (err) {
                 this.log.warn(`Error on seral port init: ` + err);
                 this.log.warn(`Adapter will not work...`);
+                this.rhs = null;
                 return;
             }
-            // in this template all states changes inside the adapters namespace are subscribed
+            // subscribe needed states
             this.subscribeStates('actions.*');
-            //this.subscribeStates('data.in.*');
             this.subscribeStates('data.out.*');
         });
     }
@@ -103,11 +192,14 @@ class RadioheadAdapter extends utils.Adapter {
     onUnload(callback) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                // close the serial port if rhs is initialized
                 if (this.rhs !== null) {
                     this.log.info('closing serial port...');
                     yield this.rhs.close();
                     this.log.info('serial port closed');
+                    this.rhs = null;
                 }
+                // reset connection state
                 this.setState('info.connection', false, true);
                 callback();
             }
@@ -116,9 +208,18 @@ class RadioheadAdapter extends utils.Adapter {
             }
         });
     }
+    /**
+     * Handle RadioHeadSerial errors.
+     * @param error The error.
+     */
     onRhsError(error) {
         this.log.error('RadioHeadSerial Errro: ' + error);
     }
+    /**
+     * Prepare some data to be used with the matcher for incoming data.
+     * @param  data Array of strings for the data to match including placeholders * and D.
+     * @return      DataArray to be used with the matcher.
+     */
     prepareDataForMatcher(data) {
         const newData = [];
         data.forEach((val, idx) => {
@@ -131,65 +232,18 @@ class RadioheadAdapter extends utils.Adapter {
         });
         return newData;
     }
+    /**
+     * Called when the init of the RadioHeadSerial is done.
+     */
     onRhsInitDone() {
         this.log.info('manager initialized, my address is ' + tools_1.hexNumber(this.address));
+        // set the connection state to connected
         this.setState('info.connection', true, true);
-        this.getForeignObjects(this.namespace + '.data.in.*', 'state', (err, objects) => {
-            if (err) {
-                this.log.error('error loading incoming data objects');
-                return;
-            }
-            for (const objectId in objects) {
-                const obj = objects[objectId];
-                const parts = obj.native.data.split(';');
-                parts.forEach((part, partIdx) => {
-                    if (part.length === 0) {
-                        this.log.warn(`empty data part #${partIdx} in object ${objectId} ignored`);
-                        return;
-                    }
-                    const data = part.trim().split(',');
-                    const dataMatch = {
-                        from: tools_1.parseAddress(obj.native.fromAddress),
-                        to: this.config.promiscuous ? tools_1.parseAddress(obj.native.toAddress) : null,
-                        data: this.prepareDataForMatcher(data),
-                        objectId: objectId,
-                        role: obj.common.role,
-                        type: obj.common.type || 'number',
-                        numParts: parts.length,
-                        matchedPart: partIdx,
-                        bufferDataType: obj.native.dataType,
-                        bufferDataStart: data.indexOf('D'),
-                        factor: obj.native.factor,
-                        offset: obj.native.offset,
-                        decimals: obj.native.decimals
-                    };
-                    this.incomingMatches.push(dataMatch);
-                });
-            }
-        });
-        this.getForeignObjects(this.namespace + '.data.out.*', 'state', (err, objects) => {
-            if (err) {
-                this.log.error('error loading outgoing data objects');
-                return;
-            }
-            for (const objectId in objects) {
-                const obj = objects[objectId];
-                const parts = obj.native.data.split(';').map((p) => p.trim().split(','));
-                const data = [];
-                parts.forEach((part) => {
-                    data.push(this.prepareDataForMatcher(part));
-                });
-                this.outgoingMatches[objectId] = {
-                    to: tools_1.parseAddress(obj.native.toAddress) || 0,
-                    data: data.map((d) => Buffer.from(d)),
-                    role: obj.common.role,
-                    type: obj.common.type || 'number',
-                    bufferDataType: obj.native.dataType,
-                    bufferDataStart: parts[0].indexOf('D')
-                };
-            }
-        });
     }
+    /**
+     * Handler for incoming RadioHead messages.
+     * @param msg The receied RadioHead message.
+     */
     onRhsData(msg) {
         this.setStateAsync('info.receivedCount', ++this.receivedCount, true);
         this.setStateAsync('info.lastReceived', new Date().toISOString(), true);
@@ -200,6 +254,7 @@ class RadioheadAdapter extends utils.Adapter {
         const data = [...msg.data]; // convert buffer to array
         // set the msg as incoming data, replacing the data buffer by the array
         this.setStateAsync('data.incoming', { val: Object.assign({}, msg, { data }) }, true);
+        // check for matches
         this.incomingMatches.forEach((dataMatch) => {
             // filter addresses
             if (msg.headerFrom !== dataMatch.from && dataMatch.from !== null)
@@ -214,14 +269,22 @@ class RadioheadAdapter extends utils.Adapter {
             }
         });
     }
+    /**
+     * Handler for matched RadioHead messages.
+     * @param  msg       The RadioHead message.
+     * @param  dataMatch The matched incoming data.
+     * @return           Promise which will be resolved when the corresponding state is updated.
+     */
     handleMatchedMessage(msg, dataMatch) {
         return __awaiter(this, void 0, void 0, function* () {
             switch (dataMatch.role) {
                 case 'button':
+                    // buttons are pushed only
                     yield this.setForeignStateAsync(dataMatch.objectId, true, true);
                     break;
                 case 'indecator':
                 case 'switch':
+                    // switch and indecator can be set true/false or toggled
                     if (dataMatch.numParts === 1) {
                         // only one part... toggle
                         const oldState = yield this.getForeignStateAsync(dataMatch.objectId);
@@ -258,6 +321,12 @@ class RadioheadAdapter extends utils.Adapter {
             }
         });
     }
+    /**
+     * Helper method to check if some received data matches a predefined data.
+     * @param  data    The data to check.
+     * @param  matchTo The data to match.
+     * @return         true is the data matches.
+     */
     checkDataMatch(data, matchTo) {
         // check length
         if (matchTo.length === 0)
@@ -279,6 +348,10 @@ class RadioheadAdapter extends utils.Adapter {
         // all bytes matched
         return true;
     }
+    /**
+     * Update the counter of retransmissions.
+     * @return Promise which will be resolved when the state is set.
+     */
     updateRetransmissionsCount() {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this.rhs)
@@ -290,6 +363,14 @@ class RadioheadAdapter extends utils.Adapter {
             }
         });
     }
+    /**
+     * Helper method to get some value from a buffer.
+     * @param  buf      The buffer to read from.
+     * @param  type     The type of the value in the buffer.
+     * @param  start    Start index in the buffer where the value starts.
+     * @param  objectId ID of the object for which the value should be read.
+     * @return          The read value or NaN in case of an error.
+     */
     getValueFromBuffer(buf, type, start, objectId) {
         try {
             switch (type) {
@@ -316,6 +397,15 @@ class RadioheadAdapter extends utils.Adapter {
         }
         return NaN;
     }
+    /**
+     * Helper method to write some value into a buffer.
+     * @param  val      The value to write.
+     * @param  buf      The buffer to write into.
+     * @param  type     The type of the value in the buffer.
+     * @param  start    Start index in the buffer where the value starts.
+     * @param  objectId ID of the object for which the value should be written.
+     * @return          true if the value is written successfully or false in case of an error.
+     */
     writeValueToBuffer(val, buf, type, start, objectId) {
         try {
             switch (type) {
@@ -373,20 +463,24 @@ class RadioheadAdapter extends utils.Adapter {
         return true;
     }
     /**
-     * Is called if a subscribed object changes
+     * Is called if a subscribed object changes.
+     * @param id  The ID of the object.
+     * @param obj The ioBroker object.
      */
     onObjectChange(id, obj) {
         if (obj) {
             // The object was changed
-            this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
+            this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
         }
         else {
             // The object was deleted
-            this.log.info(`object ${id} deleted`);
+            this.log.debug(`object ${id} deleted`);
         }
     }
     /**
-     * Is called if a subscribed state changes
+     * Is called if a subscribed state changes.
+     * @param id    The ID of the state.
+     * @param state The ioBroker state.
      */
     onStateChange(id, state) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -397,6 +491,7 @@ class RadioheadAdapter extends utils.Adapter {
                 // we aren't able to send something if rhs is not initialized
                 if (state.ack === true || !this.rhs)
                     return;
+                // handle special states
                 switch (id) {
                     case this.namespace + '.actions.resetCounters':
                         this.log.info('reset information counters');
@@ -411,10 +506,17 @@ class RadioheadAdapter extends utils.Adapter {
                 }
                 // is this some outgoing data?
                 if (this.outgoingMatches.hasOwnProperty(id)) {
+                    // log a warning if rhs is not ready
+                    if (!this.rhs) {
+                        this.log.warn(`unable to send new value of '${id}' because of previous errors`);
+                        return;
+                    }
+                    // prepare the data for sending
                     let buf = null;
                     switch (this.outgoingMatches[id].role) {
                         case 'switch':
                         case 'indecator':
+                            // switch or indecator uses the second data group for false value if provied
                             if (this.outgoingMatches[id].data.length > 1 && !state.val) {
                                 // send false
                                 buf = Buffer.from(this.outgoingMatches[id].data[1]); // copy the configured buffer to prevent issues
@@ -446,6 +548,14 @@ class RadioheadAdapter extends utils.Adapter {
             }
         });
     }
+    /**
+     * Method to send some data using RadioHead.
+     * @param  to              Address of the receiver.
+     * @param  buf             The data to send as a buffer.
+     * @param  sendingObjectId ID of the ioBroker object which triggered the sending.
+     * @param  stateAck        ioBroker state so set the ack on when sent successfully.
+     * @return                 A Promise which will be resolved when done. If there was an error the first argument will be the error.
+     */
     rhsSend(to, buf, sendingObjectId, stateAck) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this.rhs)
@@ -456,6 +566,7 @@ class RadioheadAdapter extends utils.Adapter {
             let err = undefined;
             yield this.rhs.send(to, buf)
                 .then(() => {
+                // update ok info
                 this.setStateAsync('info.sentOkCount', ++this.sentOkCount, true);
                 this.setStateAsync('info.lastSentOk', new Date().toISOString(), true);
                 // set the ack flag
@@ -464,23 +575,26 @@ class RadioheadAdapter extends utils.Adapter {
                 }
             })
                 .catch((e) => {
+                // update error info
                 this.setStateAsync('info.sentErrorCount', ++this.sentErrorCount, true);
                 this.setStateAsync('info.lastSentError', new Date().toISOString(), true);
                 this.log.warn(`error sending message for ${sendingObjectId} to ${tools_1.hexNumber(to)} - ${e}`);
                 err = e;
             })
+                // in any case update the retransmissions counter
                 .then(() => this.updateRetransmissionsCount());
             return err;
         });
     }
     /**
-     * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-     * Using this method requires "common.message" property to be set to true in io-package.json
+     * Some message was sent to this instance over message box (e.g. by a script).
+     * @param obj The receied ioBroker message.
      */
     onMessage(obj) {
         this.log.debug('got message ' + JSON.stringify(obj));
         if (typeof obj === 'object' && obj.message) {
             if (obj.command === 'send') {
+                // we should send some message...
                 if (typeof obj.message !== 'object') {
                     this.log.warn(`invalid send message from ${obj.from} received ` + JSON.stringify(obj.message));
                     return;
