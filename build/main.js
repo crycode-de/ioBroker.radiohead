@@ -171,14 +171,17 @@ class RadioheadAdapter extends utils.Adapter {
                     autoInit: false
                 });
                 this.rhs.on('error', this.onRhsError);
-                this.rhs.on('init-done', this.onRhsInitDone);
                 this.rhs.on('data', this.onRhsData);
-                yield this.rhs.init();
+                yield this.rhs.init()
+                    .then(() => {
+                    this.log.info('manager initialized, my RadioHead address is ' + tools_1.hexNumber(this.address));
+                    // set the connection state to connected
+                    this.setState('info.connection', true, true);
+                });
             }
             catch (err) {
-                this.log.warn(`Error on seral port init: ` + err);
+                this.log.warn(`Error on serial port init: ` + err);
                 this.log.warn(`Adapter will not work...`);
-                this.rhs = null;
                 return;
             }
             // subscribe needed states
@@ -231,14 +234,6 @@ class RadioheadAdapter extends utils.Adapter {
             }
         });
         return newData;
-    }
-    /**
-     * Called when the init of the RadioHeadSerial is done.
-     */
-    onRhsInitDone() {
-        this.log.info('manager initialized, my address is ' + tools_1.hexNumber(this.address));
-        // set the connection state to connected
-        this.setState('info.connection', true, true);
     }
     /**
      * Handler for incoming RadioHead messages.
@@ -506,11 +501,6 @@ class RadioheadAdapter extends utils.Adapter {
                 }
                 // is this some outgoing data?
                 if (this.outgoingMatches.hasOwnProperty(id)) {
-                    // log a warning if rhs is not ready
-                    if (!this.rhs) {
-                        this.log.warn(`unable to send new value of '${id}' because of previous errors`);
-                        return;
-                    }
                     // prepare the data for sending
                     let buf = null;
                     switch (this.outgoingMatches[id].role) {
@@ -558,8 +548,10 @@ class RadioheadAdapter extends utils.Adapter {
      */
     rhsSend(to, buf, sendingObjectId, stateAck) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!this.rhs)
-                return new Error('Not initialized');
+            if (!this.rhs || !this.rhs.isInitDone()) {
+                this.log.warn(`unable to send new value of '${sendingObjectId}' because we are not ready to send`);
+                return Promise.resolve(new Error('Unable to send, not ready'));
+            }
             if (this.config.logAllData) {
                 this.log.info(`sending <${tools_1.formatBufferAsHexString(buf)}> to ${tools_1.hexNumber(to)}`);
             }
@@ -632,9 +624,6 @@ __decorate([
 __decorate([
     core_decorators_1.autobind
 ], RadioheadAdapter.prototype, "onRhsError", null);
-__decorate([
-    core_decorators_1.autobind
-], RadioheadAdapter.prototype, "onRhsInitDone", null);
 __decorate([
     core_decorators_1.autobind
 ], RadioheadAdapter.prototype, "onRhsData", null);
