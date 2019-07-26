@@ -82,7 +82,7 @@ Wenn aktiviert, dann wird jede empfangene und jede gesendete Nachricht in das Lo
 ![Eingehende Daten](./img/eingehende_daten.png)
 
 #### Name
-Der Name des Objektes. Muss einmalig für die eingehenden Daten der Instanz des Adapters sein.
+Der Name des ioBroker-Objektes. Muss einmalig für die eingehenden Daten der Instanz des Adapters sein.
 
 Es ist möglich Gruppen zu bilden, indem in den Namen Punkte verwendet werden.
 
@@ -109,7 +109,7 @@ Es ist zudem möglich ein `*` für eine beliebige Zu-Adresse zu verwenden.
 *Hinweis:* Ohne aktivierten Promiscuous-Modus können nur Nachrichten an die eigene Adresse und die Broadcastadresse `0xFF` (bzw. `255`) empfangen werden.
 
 #### Daten
-Dies sind die Daten der empfangenen Nachricht in einzelnen, durch Komma getrennte, Bytes.
+Dies sind die Daten der empfangenen Nachricht in einzelnen, durch Komma getrennte Bytes.
 Anhand dieser Daten wird eine empfangene Nachricht analysiert und verarbeitet.
 
 Die Bytes können als Hexadezimalzahl (`0x00` bis `0xFF`) oder Dezimalzahl (`0` bis `255`) angegeben werden.
@@ -124,7 +124,7 @@ Die Erste Gruppe ist dabei für den `true`-Wert und die zweite für den `false`-
 Wird nur eine Gruppe angegeben, so wird der aktuelle Zustand beim Empfangen umgeschaltet.
 
 **Beispiele:**
-* Festes Byte `0x10`, 32Bit Float Zahl, 4 beliebige Bytes: `0x01,D,D,D,D,*,*,*,*`
+* Festes Byte `0x10`, 32-Bit Float Zahl, 4 beliebige Bytes: `0x01,D,D,D,D,*,*,*,*`
 * Zwei feste Bytes für einen Taster: `0x01,0x00`
 * Zwei Gruppen mit je einem Byte für einen Schalter: `0x05;0x06`
 
@@ -153,7 +153,7 @@ Anzahl an Dezimalstellen, auf die ein empfangender Wert (nach der Berechnung mit
 ![Ausgehende Daten](./img/ausgehende_daten.png)
 
 #### Name
-Der Name des Objektes. Muss einmalig für die ausgehenden Daten der Instanz des Adapters sein.
+Der Name des ioBroker-Objektes. Muss einmalig für die ausgehenden Daten der Instanz des Adapters sein.
 
 Es ist möglich Gruppen zu bilden, indem in den Namen Punkte verwendet werden.
 
@@ -187,7 +187,7 @@ Die Erste Gruppe ist dabei für den `true`-Wert und die zweite für den `false`-
 Wird nur eine Gruppe angegeben, so wird immer diese Gruppe gesendet.
 
 **Beispiele:**
-* Festes Byte `0x42`, 16Bit Integer: `0x42,D,D`
+* Festes Byte `0x42`, 16-Bit Integer: `0x42,D,D`
 * Zwei feste Bytes für einen Taster: `0x01,0x02`
 * Zwei Gruppen mit je zwei Bytes für einen Schalter: `0x01,0x00;0x01,0xFF`
 

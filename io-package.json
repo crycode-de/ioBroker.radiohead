@@ -41,6 +41,10 @@
             "pl": "Jest to adapter ioBroker do integracji sieci RadioHead za pomocą interfejsu szeregowego.",
             "zh-cn": "这是一个使用串行接口集成RadioHead网络的ioBroker-Adapter。"
         },
+        "docs": {
+          "en": "docs/en/radiohead.md",
+          "de": "docs/de/radiohead.md"
+        },
         "authors": [
             "Peter Müller <peter@crycode.de>"
         ],
