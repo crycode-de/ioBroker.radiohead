@@ -18,7 +18,7 @@ It provides addressed, reliable, retransmitted, acknowledged variable length mes
 * Possibility to send RadioHead messages by scripts.
 * Possibility to evaluate received RadioHead messages by scripts.
 
-If a message is receied via the serial port which matches the pattern of an incoming data object, then the data will be extracted and written to the state of the object.
+If a message is received via the serial port which matches the pattern of an incoming data object, then the data will be extracted and written to the state of the object.
 
 To send data the data is simply written to the state of an outgoing data object and the adapter will send it using the configured pattern.
 
@@ -61,9 +61,9 @@ If a message is not acknowledged within the given timeout, it will be send again
 If enabled `RHReliableDatagram` will be used instead of `RHDatagram`.
 
 #### Retries
-Number of retries for each message to be sent if no acknowledgment is receied.
+Number of retries for each message to be sent if no acknowledgment is received.
 
-Default is `3`. Set to `0` for no retrys.
+Default is `3`. Set to `0` for no retries.
 
 #### Timeout
 Timeout while waiting for an acknowledgment for each sent message.
@@ -95,7 +95,7 @@ The role of the data is important for the processing of the received data.
 Switches, buttons and indicators are evaluated as booleans.
 All other roles are evaluated as numeric values by extracting them out of the received buffer.
 
-#### From Address
+#### From address
 The address of the sender of the message in the RadioHead network.
 
 May be given as hex number (`0x00` to `0xFE`) or decimal number (`0` to `254`).
@@ -118,11 +118,11 @@ As a wildcard for any byte a `*` can be used.
 
 Data bytes to be extracted for the received value must be marked with a large `D` so that the data is recognized during processing. The number of consecutive `D` bytes depends on the selected data type.
 
-**Special case switch and indicator:**
+**Special cases switch and indicator:**
 
 For switches and indicators, two groups of data bytes separated by a semicolon can be specified.
-The first group is for the `true` value and the second for the` false` value.
-If only one group is specified, the current state is switched on receiving.
+The first group is for the `true` value and the second for the `false` value.
+If only one group is specified, the current state is toggled on receiving.
 
 **Examples:**
 * Fixed byte `0x10`, 32-bit float number, 4 arbitrary bytes: `0x01,D,D,D,D,*,*,*,*`
@@ -130,7 +130,7 @@ If only one group is specified, the current state is switched on receiving.
 * Two groups of one byte each for a switch: `0x05;0x06`
 
 #### Type
-This is type of the data in ioBroker.
+This is the type of the data in ioBroker.
 Possible options are *number* and *boolean*. When using boolean, the received value will be converted into a boolean value (`true` or `false`).
 
 #### Data type
@@ -182,10 +182,10 @@ May be given as hex number (`0x00` to `0xFF`) or decimal number (`0` to `255`).
 
 The bytes where the value to send should be inserted must be marked with a large `D`. The number of consecutive `D` bytes depends on the selected data type.
 
-**Special case switch and indicator:**
+**Special cases switch and indicator:**
 
 For switches and indicators, two groups of data bytes separated by a semicolon can be specified.
-The first group is for the `true` value and the second for the` false` value.
+The first group is for the `true` value and the second for the `false` value.
 If only one group is specified, this group will be send every time.
 
 **Examples:**
@@ -194,8 +194,8 @@ If only one group is specified, this group will be send every time.
 * Two groups of two bytes each for a switch: `0x01,0x00;0x01,0xFF`
 
 #### Type
-This is type of the data in ioBroker.
-Possible options are *number* and *boolean*. When using boolean, the value to sned will be converted into `0x01` (`true`) or `0x00` (`false`).
+This is the type of the data in ioBroker.
+Possible options are *number* and *boolean*. When using boolean, the value to send will be converted into `0x01` (`true`) or `0x00` (`false`).
 
 #### Data type
 The data type defines the type of data to send and thus also the writing method into the data bytes.
@@ -229,7 +229,7 @@ The endings `_le` and `_be` each designate the byte order for the data types wit
 
 ## Using in scripts
 
-It's possible to send RadioHead messages or process receied RadioHead messages in scripts.
+It's possible to send RadioHead messages or process received RadioHead messages in scripts.
 
 ### Sending with a script
 
@@ -239,7 +239,7 @@ For sending via a script the function `sendTo` can be used.
 ```js
 sendTo('radiohead.0', 'send', {
     to: 0x02, // to address
-    data: [0x01,0x02,255] // data bytes to send a an array or buffer
+    data: [0x01,0x02,255] // data bytes to send as an array or buffer
 }, (ret) => {
     log('ret: ' + JSON.stringify(ret));
     // -> ret: {}
@@ -251,8 +251,8 @@ sendTo('radiohead.0', 'send', {
 
 If the message was not sent successfully, then `ret.error` is set to the corresponding error.
 
-### Evaluate received messages via a script
-For each received message, the object `radiohead.<instance>.data.incoming` is updated and the value is set to an object with received data.
+### Evaluate received messages in a script
+For each received message, the object `radiohead.<instance>.data.incoming` is updated and the value is set to an object with the received data.
 This change can be evaluated accordingly.
 
 **Example:**
