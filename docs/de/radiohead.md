@@ -15,8 +15,8 @@ Es bietet adressierte, zuverlässige, wiederholt übertragene und bestätigte Na
 * Empfang von Nachrichten/Befehlen von anderen Knoten im RadioHead-Netzwerk.
 * Senden von Nachrichten/Befehlen an andere Knoten im RadioHead-Netzwerk.
 * Einzeln konfigurierbare Objekte für eingehende und ausgehende Daten.
-* Möglichkeit RadioHead-Nachrichten über Scripte zu senden.
-* Möglichkeit empfangene RadioHead-Nachrichten über Scripte auszuwerten.
+* Möglichkeit RadioHead-Nachrichten über Skripte zu senden.
+* Möglichkeit empfangene RadioHead-Nachrichten über Skripte auszuwerten.
 
 Wird über die serielle Schnittstelle eine Nachricht empfangen, die zum Muster eines Objektes der eingehenden Daten passt, so werden die Daten daraus extrahiert und von dem Adapter in den State des Objektes geschrieben.
 
@@ -221,7 +221,7 @@ Die folgenden Datentypen stehen beim Empfangen und Senden von Daten zur Verfügu
 
 Die Endungen `_le` und `_be` bezeichnen jeweils die Byte-Reihenfolge (endianness) bei den Datentypen mit mehr als einem Byte. Diese hängt davon ab, wie die Gegenstelle die Daten sendet bzw. verarbeitet.
 
-* `_le` - *little-endian*: kleinswertige Byte zuerst
+* `_le` - *little-endian*: kleinstwertige Byte zuerst
 * `_be` - *big-endian*: höchstwertige Byte zuerst
 
 

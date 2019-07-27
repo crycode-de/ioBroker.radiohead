@@ -19,6 +19,7 @@ tsconfig.*.json
 
 .eslintrc.json
 .eslintrc.js
+.jshintrc
 
 # Sourcemaps
 maps/
