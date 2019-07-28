@@ -2,6 +2,7 @@
     "<em>Hint:</em> Click on the ?-button at the top to get help and some examples.": "<em>Подсказка</em>. Нажмите на? Кнопка вверху, чтобы получить помощь и несколько примеров.",
     "Add entry": "Добавить запись",
     "Address": "Адрес",
+    "Allowed chars: a-z A-Z 0-9 - _": "Разрешенные символы: a-z A-Z 0-9 - _",
     "Baud rate": "Скорость передачи",
     "Data": "Данные",
     "Data type": "Тип данных",

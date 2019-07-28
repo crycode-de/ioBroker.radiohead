@@ -219,8 +219,12 @@
         }
 
         const $name = $('#values-in .values-input[data-name="name"][data-index="' + id + '"]');
-        if (!$name.val()) {
+        const name = $name.val();
+        if (!name) {
           setError($name, 'Empty names are not allowed');
+          errorCount++;
+        } else if (name.match(/[^\w_-]/)) {
+          setError($name, 'Allowd chars: a-z A-Z 0-9 - _');
           errorCount++;
         } else {
           setError($name, false);
@@ -288,8 +292,12 @@
         }
 
         const $name = $('#values-out .values-input[data-name="name"][data-index="' + id + '"]');
-        if (!$name.val()) {
+        const name = $name.val();
+        if (!name) {
           setError($name, 'Empty names are not allowed');
+          errorCount++;
+        } else if (name.match(/[^\w_-]/)) {
+          setError($name, 'Allowed chars: a-z A-Z 0-9 - _');
           errorCount++;
         } else {
           setError($name, false);

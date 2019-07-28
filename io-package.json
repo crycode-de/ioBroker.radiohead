@@ -16,19 +16,7 @@
                 "zh-cn": "首次出版"
             }
         },
-        "title": "Radiohead",
-        "titleLang": {
-            "en": "Radiohead",
-            "de": "Radiohead",
-            "ru": "Radiohead",
-            "pt": "Radiohead",
-            "nl": "Radiohead",
-            "fr": "Radiohead",
-            "it": "Radiohead",
-            "es": "Radiohead",
-            "pl": "Radiohead",
-            "zh-cn": "Radiohead"
-        },
+        "title": "RadioHead",
         "desc": {
             "en": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
             "de": "Dies ist ein ioBroker-Adapter zur Integration eines RadioHead-Netzwerks über eine serielle Schnittstelle.",
