@@ -21,8 +21,7 @@ This is an ioBroker-Adapter to integrate a RadioHead network using a serial inte
 It provides addressed, reliable, retransmitted, acknowledged variable length messages.
 
 ## Changelog
-
-### 0.0.1
+### 1.0.0 (2019-07-28)
 * (Peter Müller) initial release
 
 ## License
