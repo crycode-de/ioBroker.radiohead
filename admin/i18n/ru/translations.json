@@ -1,5 +1,5 @@
 {
-    "<em>Hint:</em> Click on the ?-button at the top to get help and some examples.": "<em>Подсказка</em>. Нажмите на? Кнопка вверху, чтобы получить помощь и несколько примеров.",
+    "<em>Hint:</em> Click on the ?-button at the top to get help and some examples.": "<em>Подсказка:</em> Нажмите на ?-Кнопка вверху, чтобы получить помощь и несколько примеров.",
     "Add entry": "Добавить запись",
     "Address": "Адрес",
     "Allowed chars: a-z A-Z 0-9 - _": "Разрешенные символы: a-z A-Z 0-9 - _",
@@ -36,7 +36,7 @@
     "Unit": "Единица измерения",
     "Use <code>RHReliableDatagram</code> instead of <code>RHDatagram</code>.": "Используйте <code>RHReliableDatagram</code> вместо <code>RHDatagram</code>.",
     "When enabled, every received and sent message will be logged.": "Когда включено, каждое полученное и отправленное сообщение будет зарегистрировано.",
-    "blinds": "шторы",
+    "blinds": "жалюзи",
     "boolean": "логический",
     "button": "кнопка",
     "custom": "обычай",
@@ -54,11 +54,11 @@
     "int8": "int8",
     "number": "число",
     "switch": "переключатель",
-    "temperature": "temperature",
+    "temperature": "темпаратура",
     "uint16_be": "uint16_be",
     "uint16_le": "uint16_le",
     "uint32_be": "uint32_be",
     "uint32_le": "uint32_le",
     "uint8": "uint8",
-    "value": "значение"
+    "value": "величина́"
 }
