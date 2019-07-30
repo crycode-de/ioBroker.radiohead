@@ -1,13 +1,13 @@
 {
   "name": "iobroker.radiohead",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
   "author": {
     "name": "Peter Müller",
     "email": "peter@crycode.de"
   },
   "homepage": "https://github.com/crycode-de/ioBroker.radiohead",
-  "license": "GPL-2.0",
+  "license": "GPL-2.0-only",
   "keywords": [
     "radiohead",
     "serial",

@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "radiohead",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "news": {
+            "1.0.1": {
+                "en": "license  update",
+                "de": "Lizenz-Update",
+                "ru": "обновление лицензии",
+                "pt": "atualização de licença",
+                "nl": "licentie-update",
+                "fr": "mise à jour de licence",
+                "it": "aggiornamento della licenza",
+                "es": "actualización de licencia",
+                "pl": "aktualizacja licencji",
+                "zh-cn": "许可证更新"
+            },
             "1.0.0": {
                 "en": "initial release",
                 "de": "Erstveröffentlichung",
@@ -44,7 +56,7 @@
             "RHDatagram",
             "RHReliableDatagram"
         ],
-        "license": "GPL-2.0",
+        "license": "GPL-2.0-only",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
         "icon": "radiohead.png",
