@@ -10,15 +10,24 @@
 
 **Tests:** [![Travis-CI](http://img.shields.io/travis/crycode-de/ioBroker.radiohead/master.svg)](https://travis-ci.org/crycode-de/ioBroker.radiohead)
 
-## radiohead adapter for ioBroker
+## RadioHead adapter for ioBroker
 
 This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.
 
+[RadioHead](http://www.airspayce.com/mikem/arduino/RadioHead/) is a open source Packet Radio library for embedded microprocessors. It provides addressed, reliable, retransmitted, acknowledged variable length messages.
+
 * **[Description in English](./docs/en/radiohead.md)**
+
+---
+
+Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über eine serielle Schnittstelle.
+
+[RadioHead](http://www.airspayce.com/mikem/arduino/RadioHead/) ist eine Open Source paketbasierte Funkmodul-Bibliothek für Mikroprozessoren. Es bietet adressierte, zuverlässige, wiederholt übertragene und bestätigte Nachrichten in variabler Länge.
+
 * **[Beschreibung in Deutsch](./docs/de/radiohead.md)**
 
-[RadioHead](http://www.airspayce.com/mikem/arduino/RadioHead/) is a open source Packet Radio library for embedded microprocessors.
-It provides addressed, reliable, retransmitted, acknowledged variable length messages.
+---
+
 
 ## Changelog
 ### 1.0.1 (2019-07-30)
@@ -27,12 +36,12 @@ It provides addressed, reliable, retransmitted, acknowledged variable length mes
 ### 1.0.0 (2019-07-28)
 * (Peter Müller) initial release
 
+
 ## License
 
 Copyright (c) 2019 Peter Müller <peter@crycode.de>
 
-GNU General Public License
-==========================
+## GNU General Public License
 
 _Version 2, June 1991_  
 _Copyright © 1989, 1991 Free Software Foundation, Inc.,_  

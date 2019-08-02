@@ -24,7 +24,9 @@ Zum Senden von Daten werden die Daten einfach in den State des konfigurierten Ob
 
 ## Installation
 
-Der Adapter kann über die URL `https://github.com/crycode-de/ioBroker.radiohead.git` installiert werden.
+Der Adapter ist aktuell über das *latest*-Repository verfügbar.
+
+Alternativ kann er über die URL `https://github.com/crycode-de/ioBroker.radiohead.git` installiert werden.
 
 ## Konfiguration
 

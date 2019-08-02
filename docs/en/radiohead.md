@@ -24,7 +24,9 @@ To send data the data is simply written to the state of an outgoing data object 
 
 ## Installation
 
-The adapter can be installed using the URL `https://github.com/crycode-de/ioBroker.radiohead.git`.
+The adapter is currently available in the *latest* repository.
+
+Alternatively, it be installed using the URL `https://github.com/crycode-de/ioBroker.radiohead.git`.
 
 ## Configuration
 
