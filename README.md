@@ -30,6 +30,9 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 
 
 ## Changelog
+### 1.0.2 (2019-09-08)
+* (Peter Müller) dependency updates and bugfixes
+
 ### 1.0.1 (2019-07-30)
 * (Peter Müller) license  update
 

@@ -53,10 +53,6 @@
         }
       }
 
-      function editLine(id, line, callback) { // eslint-disable-line @typescript-eslint/no-unused-vars
-        console.log('editLine', id, line, callback);
-      }
-
       // This will be called by the admin adapter when the settings page loads
       function load(settings, onChange) { // eslint-disable-line @typescript-eslint/no-unused-vars
         namespaceIn = adapter + '.' + instance + '.data.in.';
@@ -622,14 +618,6 @@
         } else {
           $('.reliable-only').hide();
         }
-
-        /*if ($('#promiscuous').prop('checked')) {
-          $('#values-in th[data-name="toAddress"]').show();
-          $('#values-in .values-input[data-name="toAddress"]').parent().show();
-        } else {
-          $('#values-in th[data-name="toAddress"]').hide();
-          $('#values-in .values-input[data-name="toAddress"]').parent().hide();
-        }*/
       }
 
     </script>
@@ -712,8 +700,8 @@
               <th data-name="_index"     style="width:30px"></th>
               <th data-name="name"       style="width:110px" data-style="width: 110px" class="translate">Name</th>
               <th data-name="role"       style="width:120px"  data-type="select" data-default="state" data-options="state/default;/custom;temperature;value;blinds;switch;button;indicator" class="translate">Role</th>
-              <th data-name="fromAddress" style="width:110px" class="translate">From adress</th>
-              <th data-name="toAddress"   style="width:110px" class="translate" data-default="*">To adress</th>
+              <th data-name="fromAddress" style="width:110px" class="translate">From address</th>
+              <th data-name="toAddress"   style="width:110px" class="translate" data-default="*">To address</th>
               <th data-name="data"        class="translate">Data</th>
               <th data-name="type"        style="width:110px" data-type="select" data-default="number" data-options="boolean;number" class="translate">Type</th>
               <th data-name="dataType"    style="width:130px" data-type="select" data-default="uint8" data-options="int8;uint8;int16_le;int16_be;uint16_le;uint16_be;int32_le;int32_be;uint32_le;uint32_be;float32_le;float32_be;double64_le;double64_be" class="translate">Data type</th>

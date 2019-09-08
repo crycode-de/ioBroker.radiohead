@@ -1,5 +1,7 @@
-/*
- * Created with @iobroker/create-adapter v1.15.1
+/**
+ * RadioHead adapter for ioBroker
+ *
+ * Copyright (c) 2019 Peter Müller <peter@crycode.de>
  */
 
 import * as utils from '@iobroker/adapter-core';

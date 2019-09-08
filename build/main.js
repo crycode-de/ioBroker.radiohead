@@ -1,6 +1,8 @@
 "use strict";
-/*
- * Created with @iobroker/create-adapter v1.15.1
+/**
+ * RadioHead adapter for ioBroker
+ *
+ * Copyright (c) 2019 Peter Müller <peter@crycode.de>
  */
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -9,10 +11,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -28,7 +31,7 @@ class RadioheadAdapter extends utils.Adapter {
      * @param options The adapter options.
      */
     constructor(options = {}) {
-        super(Object.assign({}, options, { name: 'radiohead' }));
+        super(Object.assign(Object.assign({}, options), { name: 'radiohead' }));
         /**
          * Address of this instance in the RadioHead network.
          */
@@ -248,7 +251,7 @@ class RadioheadAdapter extends utils.Adapter {
         }
         const data = [...msg.data]; // convert buffer to array
         // set the msg as incoming data, replacing the data buffer by the array
-        this.setStateAsync('data.incoming', { val: Object.assign({}, msg, { data }) }, true);
+        this.setStateAsync('data.incoming', { val: Object.assign(Object.assign({}, msg), { data }) }, true);
         // check for matches
         this.incomingMatches.forEach((dataMatch) => {
             // filter addresses
