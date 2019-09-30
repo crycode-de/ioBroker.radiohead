@@ -240,14 +240,14 @@ class RadioheadAdapter extends utils.Adapter {
     }
     /**
      * Handler for incoming RadioHead messages.
-     * @param msg The receied RadioHead message.
+     * @param msg The received RadioHead message.
      */
     onRhsData(msg) {
         this.setStateAsync('info.receivedCount', ++this.receivedCount, true);
         this.setStateAsync('info.lastReceived', new Date().toISOString(), true);
         // log data if enabled
         if (this.config.logAllData) {
-            this.log.info(`receied <${tools_1.formatBufferAsHexString(msg.data)}> from ${tools_1.hexNumber(msg.headerFrom)} to ${tools_1.hexNumber(msg.headerTo)} msgID ${tools_1.hexNumber(msg.headerId)}`);
+            this.log.info(`received <${tools_1.formatBufferAsHexString(msg.data)}> from ${tools_1.hexNumber(msg.headerFrom)} to ${tools_1.hexNumber(msg.headerTo)} msgID ${tools_1.hexNumber(msg.headerId)}`);
         }
         const data = [...msg.data]; // convert buffer to array
         // set the msg as incoming data, replacing the data buffer by the array
@@ -583,7 +583,7 @@ class RadioheadAdapter extends utils.Adapter {
     }
     /**
      * Some message was sent to this instance over message box (e.g. by a script).
-     * @param obj The receied ioBroker message.
+     * @param obj The received ioBroker message.
      */
     onMessage(obj) {
         this.log.debug('got message ' + JSON.stringify(obj));

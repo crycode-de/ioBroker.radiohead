@@ -4,16 +4,16 @@
         "version": "1.0.2",
         "news": {
             "1.0.2": {
-              "en": "Dependency updates and bugfixes",
-              "de": "Abhängigkeitsupdates und Bugfixes",
-              "ru": "Обновления и исправления зависимостей",
-              "pt": "Atualizações de dependência e correções de bugs",
-              "nl": "Afhankelijkheidsupdates en bugfixes",
-              "fr": "Mises à jour des dépendances et corrections de bugs",
-              "it": "Aggiornamenti e correzioni di dipendenze",
-              "es": "Actualizaciones de dependencia y correcciones de errores",
-              "pl": "Aktualizacje zależności i poprawki błędów",
-              "zh-cn": "依赖关系更新和错误修正"
+                "en": "Dependency updates and bugfixes",
+                "de": "Abhängigkeitsupdates und Bugfixes",
+                "ru": "Обновления и исправления зависимостей",
+                "pt": "Atualizações de dependência e correções de bugs",
+                "nl": "Afhankelijkheidsupdates en bugfixes",
+                "fr": "Mises à jour des dépendances et corrections de bugs",
+                "it": "Aggiornamenti e correzioni di dipendenze",
+                "es": "Actualizaciones de dependencia y correcciones de errores",
+                "pl": "Aktualizacje zależności i poprawki błędów",
+                "zh-cn": "依赖关系更新和错误修正"
             },
             "1.0.1": {
                 "en": "license  update",
