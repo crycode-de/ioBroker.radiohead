@@ -280,7 +280,7 @@ class RadioheadAdapter extends utils.Adapter {
 
   /**
    * Handler for incoming RadioHead messages.
-   * @param msg The receied RadioHead message.
+   * @param msg The received RadioHead message.
    */
   @autobind
   private onRhsData (msg: ReceivedMessage): void {
@@ -289,7 +289,7 @@ class RadioheadAdapter extends utils.Adapter {
 
     // log data if enabled
     if (this.config.logAllData) {
-      this.log.info(`receied <${formatBufferAsHexString(msg.data)}> from ${hexNumber(msg.headerFrom)} to ${hexNumber(msg.headerTo)} msgID ${hexNumber(msg.headerId)}`);
+      this.log.info(`received <${formatBufferAsHexString(msg.data)}> from ${hexNumber(msg.headerFrom)} to ${hexNumber(msg.headerTo)} msgID ${hexNumber(msg.headerId)}`);
     }
 
     const data: DataArray = [...msg.data]; // convert buffer to array
@@ -610,7 +610,7 @@ class RadioheadAdapter extends utils.Adapter {
 
   /**
    * Some message was sent to this instance over message box (e.g. by a script).
-   * @param obj The receied ioBroker message.
+   * @param obj The received ioBroker message.
    */
   @autobind
   private onMessage(obj: ioBroker.Message): void {
