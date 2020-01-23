@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "radiohead",
-        "version": "1.0.2",
+        "version": "1.0.3",
         "news": {
+            "1.0.3": {
+                "en": "Better handling of changed objects in admin, added connectionType in io-package.json and updated dependencies.",
+                "de": "Besserer Umgang mit geänderten Objekten in Admin, connectionType in io-package.json hinzugefügt und Abhängigkeiten aktualisiert.",
+                "ru": "Улучшена обработка измененных объектов в админке, добавлен connectionType в io-package.json и обновлены зависимости.",
+                "pt": "Melhor manipulação de objetos alterados no admin, adição de connectionType no io-package.json e dependências atualizadas.",
+                "nl": "Betere afhandeling van gewijzigde objecten in admin, toegevoegd connectionType in io-package.json en bijgewerkte afhankelijkheden.",
+                "fr": "Meilleure gestion des objets modifiés dans admin, ajout de connectionType dans io-package.json et mises à jour des dépendances.",
+                "it": "Migliore gestione degli oggetti modificati in admin, aggiunta connectionType in io-package.json e dipendenze aggiornate.",
+                "es": "Mejor manejo de objetos modificados en el administrador, tipo de conexión agregado en io-package.json y dependencias actualizadas.",
+                "pl": "Lepsza obsługa zmienionych obiektów w adminie, dodane connectionType w pliku io-package.json i zaktualizowane zależności.",
+                "zh-cn": "更好地处理admin中更改的对象，在io-package.json中添加了connectionType和更新了依赖项。"
+            },
             "1.0.2": {
                 "en": "Dependency updates and bugfixes",
                 "de": "Abhängigkeitsupdates und Bugfixes",
@@ -78,6 +90,7 @@
         "loglevel": "info",
         "mode": "daemon",
         "type": "protocols",
+        "connectionType": "local polling",
         "compact": true,
         "materialize": true,
         "messagebox": true,
