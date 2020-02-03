@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "radiohead",
-        "version": "1.0.3",
+        "version": "1.0.4",
         "news": {
+            "1.0.4": {
+                "en": "Updated connectionType and dataSource in io-package.json",
+                "de": "connectionType und dataSource in io-package.json aktualisiert",
+                "ru": "Обновлен тип соединения и источник данных в io-package.json",
+                "pt": "ConnectionType e dataSource atualizados em io-package.json",
+                "nl": "Bijgewerkt verbindingstype en gegevensbron in io-pakket.json",
+                "fr": "ConnectionType et dataSource mis à jour dans io-package.json",
+                "it": "Tipo di connessione e dataSource aggiornati in io-package.json",
+                "es": "ConnectionType y dataSource actualizados en io-package.json",
+                "pl": "Zaktualizowano typ połączenia i źródło danych w io-package.json",
+                "zh-cn": "更新了io-package.json中的connectionType和dataSource"
+            },
             "1.0.3": {
                 "en": "Better handling of changed objects in admin, added connectionType in io-package.json and updated dependencies.",
                 "de": "Besserer Umgang mit geänderten Objekten in Admin, connectionType in io-package.json hinzugefügt und Abhängigkeiten aktualisiert.",
@@ -90,7 +102,8 @@
         "loglevel": "info",
         "mode": "daemon",
         "type": "protocols",
-        "connectionType": "local polling",
+        "connectionType": "local",
+        "dataSource": "push",
         "compact": true,
         "materialize": true,
         "messagebox": true,

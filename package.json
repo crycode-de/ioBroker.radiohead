@@ -1,6 +1,6 @@
 {
   "name": "iobroker.radiohead",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
   "author": {
     "name": "Peter Müller",
