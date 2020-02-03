@@ -49,7 +49,7 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 
 ## License
 
-Copyright (c) 2019 Peter Müller <peter@crycode.de>
+Copyright (c) 2019-2020 Peter Müller <peter@crycode.de>
 
 ## GNU General Public License
 
