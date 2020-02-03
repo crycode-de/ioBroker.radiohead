@@ -30,6 +30,9 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 
 
 ## Changelog
+### 1.0.4 (2020-02-03)
+* (Peter Müller) Updated connectionType and dataSource in io-package.json.
+
 ### 1.0.3 (2020-01-23)
 * (Peter Müller) Better handling of changed objects in admin.
 * (Peter Müller) Added `connectionType` in `io-package.json` and updated dependencies.
