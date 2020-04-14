@@ -1,7 +1,7 @@
 /**
  * RadioHead adapter for ioBroker
  *
- * Copyright (c) 2019 Peter Müller <peter@crycode.de>
+ * Copyright (c) 2019-2020 Peter Müller <peter@crycode.de>
  */
 
 import * as utils from '@iobroker/adapter-core';
@@ -121,7 +121,7 @@ class RadioheadAdapter extends utils.Adapter {
       const state = await this.getStateAsync('info.' + id);
       this.log.debug(`loaded ${this.namespace}.info.${id} ` + JSON.stringify(state));
       if(state) {
-        this[id] = state.val;
+        this[id] = state.val as number;
       } else {
         await this.setStateAsync('info.' + id, 0, true);
       }
@@ -210,6 +210,12 @@ class RadioheadAdapter extends utils.Adapter {
 
       this.rhs.on('error', this.onRhsError);
       this.rhs.on('data', this.onRhsData);
+
+      // enable promiscuous mode if configured
+      if (this.config.promiscuous) {
+        this.rhs.setPromiscuous(true);
+        this.log.info('promiscuous mode enabled');
+      }
 
       await this.rhs.init()
         .then(() => {
@@ -549,7 +555,7 @@ class RadioheadAdapter extends utils.Adapter {
             buf[this.outgoingMatches[id].bufferDataStart] = (state.val) ? 0x01 : 0x00;
           } else {
             // write the value into the buffer
-            if (!this.writeValueToBuffer(state.val, buf, this.outgoingMatches[id].bufferDataType, this.outgoingMatches[id].bufferDataStart, id)) {
+            if (!this.writeValueToBuffer(state.val as number, buf, this.outgoingMatches[id].bufferDataType, this.outgoingMatches[id].bufferDataStart, id)) {
               return;
             }
           }
