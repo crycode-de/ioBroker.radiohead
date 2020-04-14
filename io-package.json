@@ -4,16 +4,16 @@
         "version": "1.0.5",
         "news": {
             "1.0.5": {
-                "en": "Fixed bug in grouping in/out data. Added missing translations. Updated dependencies.",
-                "de": "Fehler beim Gruppieren von In/Out-Daten behoben. Fehlende Übersetzungen hinzugefügt. Abhängigkeiten aktualisiert.",
-                "ru": "Исправлена ошибка в группировке входных / выходных данных. Добавлены недостающие переводы. Обновлены зависимости.",
-                "pt": "Corrigido erro no agrupamento de dados de entrada e saída. Adicionadas traduções ausentes. Dependências atualizadas.",
-                "nl": "Bug opgelost bij het groeperen van in / uit gegevens. Ontbrekende vertalingen toegevoegd. Bijgewerkte afhankelijkheden.",
-                "fr": "Correction d'un bug dans le regroupement des données d'entrée / sortie. Ajout de traductions manquantes. Dépendances mises à jour.",
-                "it": "Corretto errore nel raggruppamento dei dati in / out. Aggiunte traduzioni mancanti. Dipendenze aggiornate.",
-                "es": "Se corrigió un error en la agrupación de datos de entrada / salida. Se agregaron traducciones faltantes. Dependencias actualizadas.",
-                "pl": "Naprawiono błąd w grupowaniu danych we / wy. Dodano brakujące tłumaczenia. Zaktualizowano zależności.",
-                "zh-cn": "修复了分组输入/输出数据的错误。添加了缺少的翻译。更新了依赖性。"
+                "en": "Fixed bug in grouping in/out data. Added missing translations. Fixed bug with promiscuous mode. Updated dependencies.",
+                "de": "Fehler beim Gruppieren von In/Out-Daten behoben. Fehlende Übersetzungen hinzugefügt. Fehler im Promiscuous-Modus behoben. Abhängigkeiten aktualisiert.",
+                "ru": "Исправлена ошибка в группировке входных / выходных данных. Добавлены недостающие переводы. Исправлена ошибка с неразборчивым режимом. Обновлены зависимости.",
+                "pt": "Corrigido erro no agrupamento de dados de entrada e saída. Adicionadas traduções ausentes. Corrigido o erro no modo promíscuo. Dependências atualizadas.",
+                "nl": "Bug opgelost bij het groeperen van in / uit gegevens. Ontbrekende vertalingen toegevoegd. Bug opgelost met promiscue modus. Bijgewerkte afhankelijkheden.",
+                "fr": "Correction d'un bug dans le regroupement des données d'entrée / sortie. Ajout de traductions manquantes. Correction d'un bug avec le mode promiscuous. Dépendances mises à jour.",
+                "it": "Corretto errore nel raggruppamento dei dati in / out. Aggiunte traduzioni mancanti. Bug risolto con modalità promiscua. Dipendenze aggiornate.",
+                "es": "Se corrigió un error en la agrupación de datos de entrada / salida. Se agregaron traducciones faltantes. Error corregido con el modo promiscuo. Dependencias actualizadas.",
+                "pl": "Naprawiono błąd w grupowaniu danych we / wy. Dodano brakujące tłumaczenia. Naprawiono błąd w trybie rozwiązanym. Zaktualizowano zależności.",
+                "zh-cn": "修复了分组输入/输出数据的错误。添加了缺少的翻译。修复了混杂模式下的错误。更新了依赖性。"
             },
             "1.0.4": {
                 "en": "Updated connectionType and dataSource in io-package.json",

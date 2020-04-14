@@ -2,7 +2,7 @@
 /**
  * RadioHead adapter for ioBroker
  *
- * Copyright (c) 2019 Peter Müller <peter@crycode.de>
+ * Copyright (c) 2019-2020 Peter Müller <peter@crycode.de>
  */
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -175,6 +175,11 @@ class RadioheadAdapter extends utils.Adapter {
                 });
                 this.rhs.on('error', this.onRhsError);
                 this.rhs.on('data', this.onRhsData);
+                // enable promiscuous mode if configured
+                if (this.config.promiscuous) {
+                    this.rhs.setPromiscuous(true);
+                    this.log.info('promiscuous mode enabled');
+                }
                 yield this.rhs.init()
                     .then(() => {
                     this.log.info('manager initialized, my RadioHead address is ' + tools_1.hexNumber(this.address));
