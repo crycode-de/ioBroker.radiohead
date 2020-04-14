@@ -1,5 +1,5 @@
+<!DOCTYPE html>
 <html>
-
 <head>
 
     <!-- Load ioBroker scripts and styles-->
@@ -132,12 +132,12 @@
                #values-in .values-input[data-name="toAddress"], \
                #values-in .values-input[data-name="data"], \
                #values-in .values-input[data-name="type"]')
-            .on('change', function () {
-              checkLineIn($(this).data('index'));
-            })
-            .on('keyup', function () {
-              checkLineIn($(this).data('index'));
-            });
+              .on('change', function () {
+                checkLineIn($(this).data('index'));
+              })
+              .on('keyup', function () {
+                checkLineIn($(this).data('index'));
+              });
 
             // run initial check
             $('#values-in tr[data-index]').each(function () {
@@ -179,12 +179,12 @@
                #values-out .values-input[data-name="toAddress"], \
                #values-out .values-input[data-name="data"], \
                #values-out .values-input[data-name="type"]')
-            .on('change', function () {
-              checkLineOut($(this).data('index'));
-            })
-            .on('keyup', function () {
-              checkLineOut($(this).data('index'));
-            });
+              .on('change', function () {
+                checkLineOut($(this).data('index'));
+              })
+              .on('keyup', function () {
+                checkLineOut($(this).data('index'));
+              });
 
             // run initial check
             $('#values-out tr[data-index]').each(function () {
@@ -239,8 +239,11 @@
         if (!name) {
           setError($name, 'Empty names are not allowed');
           errorCount++;
-        } else if (name.match(/[^\w_-]/)) {
-          setError($name, 'Allowd chars: a-z A-Z 0-9 - _');
+        } else if (name.match(/[^\w._-]/)) {
+          setError($name, 'Allowd chars: a-z A-Z 0-9 - _ .');
+          errorCount++;
+        } else if (name.match(/^\./) || name.match(/\.$/)) {
+          setError($name, 'Starting or ending with a dot is not allowed');
           errorCount++;
         } else {
           setError($name, false);
@@ -312,8 +315,11 @@
         if (!name) {
           setError($name, 'Empty names are not allowed');
           errorCount++;
-        } else if (name.match(/[^\w_-]/)) {
-          setError($name, 'Allowed chars: a-z A-Z 0-9 - _');
+        } else if (name.match(/[^\w._-]/)) {
+          setError($name, 'Allowd chars: a-z A-Z 0-9 - _ .');
+          errorCount++;
+        } else if (name.match(/^\./) || name.match(/\.$/)) {
+          setError($name, 'Starting or ending with a dot is not allowed');
           errorCount++;
         } else {
           setError($name, false);
