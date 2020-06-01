@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.formatBufferAsHexString = exports.round = exports.hexNumber = exports.parseAddress = exports.parseNumber = void 0;
 /**
  * Parse a hex or decimal number string.
  * @param num The number as a string (e.g. 0x42 or 127)

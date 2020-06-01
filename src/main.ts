@@ -85,7 +85,7 @@ class RadioheadAdapter extends utils.Adapter {
    * Constructor to create a new instance of the adapter.
    * @param options The adapter options.
    */
-  public constructor(options: Partial<ioBroker.AdapterOptions> = {}) {
+  public constructor(options: Partial<utils.AdapterOptions> = {}) {
     super({
       ...options,
       name: 'radiohead',
@@ -660,7 +660,7 @@ class RadioheadAdapter extends utils.Adapter {
 
 if (module.parent) {
   // Export the constructor in compact mode
-  module.exports = (options: Partial<ioBroker.AdapterOptions> | undefined) => new RadioheadAdapter(options);
+  module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new RadioheadAdapter(options);
 } else {
   // otherwise start the instance directly
   (() => new RadioheadAdapter())();
