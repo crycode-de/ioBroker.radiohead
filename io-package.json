@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "radiohead",
-        "version": "1.0.5",
+        "version": "1.0.6",
         "news": {
+            "1.0.6": {
+                "en": "Fixed bug on deleting incoming data entries.",
+                "de": "Fehler beim Löschen eine Eintrags eingehender Daten behoben.",
+                "ru": "Исправлена ошибка удаления входящих данных.",
+                "pt": "Corrigido o erro ao excluir entradas de dados recebidas.",
+                "nl": "Bug opgelost bij het verwijderen van inkomende gegevensinvoer.",
+                "fr": "Correction d'un bug sur la suppression des entrées de données entrantes.",
+                "it": "Corretto errore nell'eliminazione delle voci di dati in arrivo.",
+                "es": "Se corrigió un error al eliminar las entradas de datos entrantes.",
+                "pl": "Naprawiono błąd usuwania wpisów danych przychodzących.",
+                "zh-cn": "修复了删除传入数据条目的错误。"
+            }
             "1.0.5": {
                 "en": "Fixed bug in grouping in/out data. Added missing translations. Fixed bug with promiscuous mode. Updated dependencies.",
                 "de": "Fehler beim Gruppieren von In/Out-Daten behoben. Fehlende Übersetzungen hinzugefügt. Fehler im Promiscuous-Modus behoben. Abhängigkeiten aktualisiert.",

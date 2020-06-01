@@ -30,6 +30,9 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 
 
 ## Changelog
+### 1.0.6 (2020-06-01)
+* (Peter Müller) Fixed bug on deleting incoming data entries.
+
 ### 1.0.5 (2020-04-14)
 * (Peter Müller) Fixed bug in grouping in/out data.
 * (Peter Müller) Added missing translations.
