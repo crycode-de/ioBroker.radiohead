@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "radiohead",
-        "version": "1.0.7",
+        "version": "1.1.0",
         "news": {
+            "1.1.0": {
+                "en": "Added Sentry, Updated dependencies",
+                "de": "Sentry hinzugefügt, Abhängigkeiten aktualisiert",
+                "ru": "Добавлен Sentry, обновлены зависимости",
+                "pt": "Adicionado Sentry, Dependências atualizadas",
+                "nl": "Sentry toegevoegd, bijgewerkte afhankelijkheden",
+                "fr": "Sentry ajoutée, dépendances mises à jour",
+                "it": "Sentinella aggiunta, dipendenze aggiornate",
+                "es": "Centinela agregado, dependencias actualizadas",
+                "pl": "Dodano Działko, Zaktualizowano zależności",
+                "zh-cn": "添加了哨兵，更新了依赖项"
+            },
             "1.0.7": {
                 "en": "Fixed bug on deleting incoming data entries.",
                 "de": "Fehler beim Löschen eine Eintrags eingehender Daten behoben.",
@@ -133,9 +145,14 @@
         "messagebox": true,
         "dependencies": [
             {
-                "js-controller": ">=1.4.2"
+                "js-controller": ">=2.0.0"
             }
-        ]
+        ],
+        "plugins": {
+            "sentry": {
+                "dsn": "https://10b549925a2f45dc8b3fc52d4bfc9811@sentry.cryhost.de/7"
+            }
+        }
     },
     "native": {
         "port": "",
