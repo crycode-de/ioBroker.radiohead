@@ -45,3 +45,4 @@ function translateText(text, targetLang) {
     });
 }
 exports.translateText = translateText;
+//# sourceMappingURL=tools-dev.js.map

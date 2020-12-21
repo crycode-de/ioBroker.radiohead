@@ -658,3 +658,4 @@ else {
     // otherwise start the instance directly
     (() => new RadioheadAdapter())();
 }
+//# sourceMappingURL=main.js.map

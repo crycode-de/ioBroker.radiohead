@@ -66,3 +66,4 @@ function formatBufferAsHexString(buf) {
     return buf.toString('hex').toUpperCase().replace(/(..)/g, ' 0x$1').trim();
 }
 exports.formatBufferAsHexString = formatBufferAsHexString;
+//# sourceMappingURL=tools.js.map

@@ -1,14 +1,16 @@
 ![Logo](admin/radiohead.png)
+
 # ioBroker.radiohead
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.radiohead.svg)](https://www.npmjs.com/package/iobroker.radiohead)
+[![NPM version](https://img.shields.io/npm/v/iobroker.radiohead.svg)](https://www.npmjs.com/package/iobroker.radiohead)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.radiohead.svg)](https://www.npmjs.com/package/iobroker.radiohead)
+![Number of Installations (latest)](https://iobroker.live/badges/radiohead-installed.svg)
+![Number of Installations (stable)](https://iobroker.live/badges/radiohead-stable.svg)
 [![Dependency Status](https://img.shields.io/david/crycode-de/iobroker.radiohead.svg)](https://david-dm.org/crycode-de/iobroker.radiohead)
-[![Known Vulnerabilities](https://snyk.io/test/github/crycode-de/ioBroker.radiohead/badge.svg)](https://snyk.io/test/github/crycode-de/ioBroker.radiohead)
 
 [![NPM](https://nodei.co/npm/iobroker.radiohead.png?downloads=true)](https://nodei.co/npm/iobroker.radiohead/)
 
-**Tests:** [![Travis-CI](http://img.shields.io/travis/crycode-de/ioBroker.radiohead/master.svg)](https://travis-ci.org/crycode-de/ioBroker.radiohead)
+**Tests:** ![Test and Release](https://github.com/crycode-de/iobroker.radiohead/workflows/Test%20and%20Release/badge.svg)
 
 ## RadioHead adapter for ioBroker
 
@@ -28,32 +30,39 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 
 ---
 
+**This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
 
 ## Changelog
+
+### 1.1.0 (2020-12-21)
+* (crycode-de) Added Sentry error reporting
+* (crycode-de) Updated dependencies
+* (crycode-de) Optimized npm package
+
 ### 1.0.7 (2020-06-01)
-* (Peter Müller) Fixed bug on deleting incoming data entries.
+* (crycode-de) Fixed bug on deleting incoming data entries.
 
 ### 1.0.5 (2020-04-14)
-* (Peter Müller) Fixed bug in grouping in/out data.
-* (Peter Müller) Added missing translations.
-* (Peter Müller) Fixed bug with promiscuous mode.
-* (Peter Müller) Updated dependencies.
+* (crycode-de) Fixed bug in grouping in/out data.
+* (crycode-de) Added missing translations.
+* (crycode-de) Fixed bug with promiscuous mode.
+* (crycode-de) Updated dependencies.
 
 ### 1.0.4 (2020-02-03)
-* (Peter Müller) Updated connectionType and dataSource in io-package.json.
+* (crycode-de) Updated connectionType and dataSource in io-package.json.
 
 ### 1.0.3 (2020-01-23)
-* (Peter Müller) Better handling of changed objects in admin.
-* (Peter Müller) Added `connectionType` in `io-package.json` and updated dependencies.
+* (crycode-de) Better handling of changed objects in admin.
+* (crycode-de) Added `connectionType` in `io-package.json` and updated dependencies.
 
 ### 1.0.2 (2019-09-08)
-* (Peter Müller) dependency updates and bugfixes
+* (crycode-de) dependency updates and bugfixes
 
 ### 1.0.1 (2019-07-30)
-* (Peter Müller) license  update
+* (crycode-de) license  update
 
 ### 1.0.0 (2019-07-28)
-* (Peter Müller) initial release
+* (crycode-de) initial release
 
 
 ## License
