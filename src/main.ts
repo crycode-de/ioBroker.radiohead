@@ -184,7 +184,7 @@ class RadioheadAdapter extends utils.Adapter {
 
         this.outgoingMatches[objectId] = {
           to: parseAddress(obj.native.toAddress) || 0,
-          data: data.map((d) => Buffer.from(d)),
+          data: data.map((d: any) => Buffer.from(d)),
           role: obj.common.role,
           type: obj.common.type || 'number',
           bufferDataType: obj.native.dataType,
