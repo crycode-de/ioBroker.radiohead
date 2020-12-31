@@ -147,5 +147,5 @@ jobs:
               with:
                 environment: production
                 tagName: ${{ steps.extract_release.outputs.VERSION }}
-                releaseNamePrefix: radiohead@
+                releaseNamePrefix: iobroker.radiohead@
                 sourceMapOptions: '{"include": ["build"]}'
