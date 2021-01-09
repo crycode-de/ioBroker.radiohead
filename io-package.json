@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "radiohead",
-        "version": "1.1.0",
+        "version": "1.1.1",
         "news": {
+            "1.1.1": {
+                "en": "Small fixes",
+                "de": "Kleine Korrekturen",
+                "ru": "Небольшие исправления",
+                "pt": "Pequenas correções",
+                "nl": "Kleine reparaties",
+                "fr": "Petits correctifs",
+                "it": "Piccole correzioni",
+                "es": "Pequeñas correcciones",
+                "pl": "Małe poprawki",
+                "zh-cn": "小修正"
+            },
             "1.1.0": {
                 "en": "Added Sentry, Updated dependencies",
                 "de": "Sentry hinzugefügt, Abhängigkeiten aktualisiert",
