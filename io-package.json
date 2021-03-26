@@ -113,6 +113,18 @@
             }
         },
         "title": "RadioHead",
+        "titleLang": {
+            "en": "RadioHead",
+            "de": "RadioHead",
+            "ru": "RadioHead",
+            "pt": "RadioHead",
+            "nl": "RadioHead",
+            "fr": "RadioHead",
+            "it": "RadioHead",
+            "es": "RadioHead",
+            "pl": "RadioHead",
+            "zh-cn": "RadioHead"
+        },
         "desc": {
             "en": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
             "de": "Dies ist ein ioBroker-Adapter zur Integration eines RadioHead-Netzwerks über eine serielle Schnittstelle.",
