@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "radiohead",
-        "version": "1.1.1",
+        "version": "1.2.0",
         "news": {
+            "1.2.0": {
+                "en": "Use stringified json for data.incoming state",
+                "de": "Verwenden Sie stringified json für data.incoming state",
+                "ru": "Используйте строковый json для состояния data.incoming",
+                "pt": "Use json stringificado para o estado data.incoming",
+                "nl": "Gebruik stringified json voor data.incoming state",
+                "fr": "Utiliser json stringified pour l'état data.incoming",
+                "it": "Usa json stringato per lo stato data.incoming",
+                "es": "Utilice json en cadena para el estado de entrada de datos",
+                "pl": "Użyj stringified json dla stanu data.incoming",
+                "zh-cn": "将字符串化的 json 用于 data.incoming 状态"
+            },
             "1.1.1": {
                 "en": "Small fixes",
                 "de": "Kleine Korrekturen",
