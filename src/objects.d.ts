@@ -1,6 +1,6 @@
 
 declare interface IncomingDataObject extends ioBroker.StateObject {
-  native: IncomingDataObjectNative & Record<string, ioBroker.ObjectField>;
+  native: IncomingDataObjectNative;
 }
 
 declare interface IncomingDataObjectNative {
@@ -30,7 +30,7 @@ declare interface IncomingDataMatch {
 }
 
 declare interface OutgoingDataObject extends ioBroker.StateObject {
-  native: OutgoingDataObjectNative & Record<string, ioBroker.ObjectField>;
+  native: OutgoingDataObjectNative;
 }
 
 declare interface OutgoingDataObjectNative {

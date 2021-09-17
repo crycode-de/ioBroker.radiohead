@@ -301,7 +301,7 @@ class RadioheadAdapter extends utils.Adapter {
     const data: DataArray = [...msg.data]; // convert buffer to array
 
     // set the msg as incoming data, replacing the data buffer by the array
-    this.setStateAsync('data.incoming', { val: {...msg, data} }, true);
+    this.setStateAsync('data.incoming', { val: JSON.stringify({...msg, data}) }, true);
 
     // check for matches
     this.incomingMatches.forEach((dataMatch) => {

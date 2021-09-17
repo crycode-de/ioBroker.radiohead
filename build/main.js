@@ -87,7 +87,7 @@ class RadioheadAdapter extends utils.Adapter {
             // Debug log the current config
             this.log.debug('config: ' + JSON.stringify(this.config));
             // Parse and check the address of the adapter in the RadioHead network
-            this.address = tools_1.parseNumber(this.config.address);
+            this.address = (0, tools_1.parseNumber)(this.config.address);
             if (isNaN(this.address) || this.address < 0 || this.address > 254) {
                 this.log.error(`Config error: Invalid address ${this.config.address} (${this.address})!`);
                 return;
@@ -119,8 +119,8 @@ class RadioheadAdapter extends utils.Adapter {
                         }
                         const data = part.trim().split(',');
                         const dataMatch = {
-                            from: tools_1.parseAddress(obj.native.fromAddress),
-                            to: this.config.promiscuous ? tools_1.parseAddress(obj.native.toAddress) : null,
+                            from: (0, tools_1.parseAddress)(obj.native.fromAddress),
+                            to: this.config.promiscuous ? (0, tools_1.parseAddress)(obj.native.toAddress) : null,
                             data: this.prepareDataForMatcher(data),
                             objectId: objectId,
                             role: obj.common.role,
@@ -152,7 +152,7 @@ class RadioheadAdapter extends utils.Adapter {
                         data.push(this.prepareDataForMatcher(part));
                     });
                     this.outgoingMatches[objectId] = {
-                        to: tools_1.parseAddress(obj.native.toAddress) || 0,
+                        to: (0, tools_1.parseAddress)(obj.native.toAddress) || 0,
                         data: data.map((d) => Buffer.from(d)),
                         role: obj.common.role,
                         type: obj.common.type || 'number',
@@ -182,7 +182,7 @@ class RadioheadAdapter extends utils.Adapter {
                 }
                 yield this.rhs.init()
                     .then(() => {
-                    this.log.info('manager initialized, my RadioHead address is ' + tools_1.hexNumber(this.address));
+                    this.log.info('manager initialized, my RadioHead address is ' + (0, tools_1.hexNumber)(this.address));
                     // set the connection state to connected
                     this.setState('info.connection', true, true);
                 });
@@ -238,7 +238,7 @@ class RadioheadAdapter extends utils.Adapter {
                 newData[idx] = null;
             }
             else {
-                newData[idx] = tools_1.parseNumber(val);
+                newData[idx] = (0, tools_1.parseNumber)(val);
             }
         });
         return newData;
@@ -252,11 +252,11 @@ class RadioheadAdapter extends utils.Adapter {
         this.setStateAsync('info.lastReceived', new Date().toISOString(), true);
         // log data if enabled
         if (this.config.logAllData) {
-            this.log.info(`received <${tools_1.formatBufferAsHexString(msg.data)}> from ${tools_1.hexNumber(msg.headerFrom)} to ${tools_1.hexNumber(msg.headerTo)} msgID ${tools_1.hexNumber(msg.headerId)}`);
+            this.log.info(`received <${(0, tools_1.formatBufferAsHexString)(msg.data)}> from ${(0, tools_1.hexNumber)(msg.headerFrom)} to ${(0, tools_1.hexNumber)(msg.headerTo)} msgID ${(0, tools_1.hexNumber)(msg.headerId)}`);
         }
         const data = [...msg.data]; // convert buffer to array
         // set the msg as incoming data, replacing the data buffer by the array
-        this.setStateAsync('data.incoming', { val: Object.assign(Object.assign({}, msg), { data }) }, true);
+        this.setStateAsync('data.incoming', { val: JSON.stringify(Object.assign(Object.assign({}, msg), { data })) }, true);
         // check for matches
         this.incomingMatches.forEach((dataMatch) => {
             // filter addresses
@@ -317,7 +317,7 @@ class RadioheadAdapter extends utils.Adapter {
                         val = this.getValueFromBuffer(msg.data, dataMatch.bufferDataType, dataMatch.bufferDataStart, dataMatch.objectId);
                         val = val * dataMatch.factor + dataMatch.offset;
                         if (typeof dataMatch.decimals === 'number') {
-                            val = tools_1.round(val, dataMatch.decimals);
+                            val = (0, tools_1.round)(val, dataMatch.decimals);
                         }
                     }
                     yield this.setForeignStateAsync(dataMatch.objectId, val, true);
@@ -561,7 +561,7 @@ class RadioheadAdapter extends utils.Adapter {
                 return Promise.resolve(new Error('Unable to send, not ready'));
             }
             if (this.config.logAllData) {
-                this.log.info(`sending <${tools_1.formatBufferAsHexString(buf)}> to ${tools_1.hexNumber(to)}`);
+                this.log.info(`sending <${(0, tools_1.formatBufferAsHexString)(buf)}> to ${(0, tools_1.hexNumber)(to)}`);
             }
             let err = undefined;
             yield this.rhs.send(to, buf)
@@ -578,7 +578,7 @@ class RadioheadAdapter extends utils.Adapter {
                 // update error info
                 this.setStateAsync('info.sentErrorCount', ++this.sentErrorCount, true);
                 this.setStateAsync('info.lastSentError', new Date().toISOString(), true);
-                this.log.warn(`error sending message for ${sendingObjectId} to ${tools_1.hexNumber(to)} - ${e}`);
+                this.log.warn(`error sending message for ${sendingObjectId} to ${(0, tools_1.hexNumber)(to)} - ${e}`);
                 err = e;
             })
                 // in any case update the retransmissions counter
@@ -600,7 +600,7 @@ class RadioheadAdapter extends utils.Adapter {
                     return;
                 }
                 const payload = obj.message;
-                const to = tools_1.parseAddress(payload.to);
+                const to = (0, tools_1.parseAddress)(payload.to);
                 let buf;
                 try {
                     buf = Buffer.from(payload.data);
