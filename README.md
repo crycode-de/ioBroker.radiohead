@@ -6,7 +6,6 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.radiohead.svg)](https://www.npmjs.com/package/iobroker.radiohead)
 ![Number of Installations (latest)](https://iobroker.live/badges/radiohead-installed.svg)
 ![Number of Installations (stable)](https://iobroker.live/badges/radiohead-stable.svg)
-[![Dependency Status](https://img.shields.io/david/crycode-de/iobroker.radiohead.svg)](https://david-dm.org/crycode-de/iobroker.radiohead)
 
 [![NPM](https://nodei.co/npm/iobroker.radiohead.png?downloads=true)](https://nodei.co/npm/iobroker.radiohead/)
 
