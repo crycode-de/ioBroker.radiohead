@@ -209,7 +209,7 @@
         const role = $('#values-in .values-input[data-name="role"][data-index="' + id + '"]').val();
         const type = $('#values-in .values-input[data-name="type"][data-index="' + id + '"]').val();
 
-        if (role === 'button' || role === 'indecator' || role === 'switch') {
+        if (role === 'button' || role === 'indicator' || role === 'switch') {
           $('#values-in .values-input[data-name="type"][data-index="' + id + '"]').parent().hide();
           $('#values-in .values-input[data-name="dataType"][data-index="' + id + '"]').parent().hide();
           $('#values-in .values-input[data-name="factor"][data-index="' + id + '"]').hide();
@@ -272,7 +272,7 @@
             regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}|\*),)*(\d{1,3}|0x[a-fA-F0-9]{2}|\*)$/;
             break;
           case 'switch':
-          case 'indecator':
+          case 'indicator':
             regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}|\*),)*(\d{1,3}|0x[a-fA-F0-9]{2}|\*)(;((\d{1,3}|0x[a-fA-F0-9]{2}|\*),)*(\d{1,3}|0x[a-fA-F0-9]{2}|\*))?$/;
             break;
           default:
@@ -294,7 +294,7 @@
         const role = $('#values-out .values-input[data-name="role"][data-index="' + id + '"]').val();
         const type = $('#values-out .values-input[data-name="type"][data-index="' + id + '"]').val();
 
-        if (role === 'button' || role === 'indecator' || role === 'switch') {
+        if (role === 'button' || role === 'indicator' || role === 'switch') {
           $('#values-out .values-input[data-name="type"][data-index="' + id + '"]').parent().hide();
           $('#values-out .values-input[data-name="dataType"][data-index="' + id + '"]').parent().hide();
           $('#values-out .values-input[data-name="unit"][data-index="' + id + '"]').hide();
@@ -340,7 +340,7 @@
             regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}),)*(\d{1,3}|0x[a-fA-F0-9]{2})$/;
             break;
           case 'switch':
-          case 'indecator':
+          case 'indicator':
             regex = /^((\d{1,3}|0x[a-fA-F0-9]{2}),)*(\d{1,3}|0x[a-fA-F0-9]{2})(;((\d{1,3}|0x[a-fA-F0-9]{2}),)*(\d{1,3}|0x[a-fA-F0-9]{2}))?$/;
             break;
           default:
@@ -440,7 +440,7 @@
 
           switch (newValuesIn[v].role) {
             case 'button':
-            case 'indecator':
+            case 'indicator':
             case 'switch':
               newValuesIn[v].type = 'boolean';
               newValuesIn[v].dataType = 'uint8';
@@ -559,7 +559,7 @@
 
           switch (newValuesOut[v].role) {
             case 'button':
-            case 'indecator':
+            case 'indicator':
             case 'switch':
               newValuesOut[v].type = 'boolean';
               newValuesOut[v].dataType = 'uint8';

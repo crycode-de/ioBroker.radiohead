@@ -436,9 +436,9 @@ class RadioheadAdapter extends utils.Adapter {
         await this.setForeignStateAsync(dataMatch.objectId, true, true);
         break;
 
-      case 'indecator':
+      case 'indicator':
       case 'switch':
-        // switch and indecator can be set true/false or toggled
+        // switch and indicator can be set true/false or toggled
         if (dataMatch.numParts === 1) {
           // only one part... toggle
           const oldState = await this.getForeignStateAsync(dataMatch.objectId);
@@ -639,8 +639,8 @@ class RadioheadAdapter extends utils.Adapter {
         let buf: Buffer | null = null;
         switch (this.outgoingMatches[id].role) {
           case 'switch':
-          case 'indecator':
-            // switch or indecator uses the second data group for false value if provied
+          case 'indicator':
+            // switch or indicator uses the second data group for false value if provied
             if (this.outgoingMatches[id].data.length > 1 && !state.val) {
               // send false
               buf = Buffer.from(this.outgoingMatches[id].data[1]) // copy the configured buffer to prevent issues
