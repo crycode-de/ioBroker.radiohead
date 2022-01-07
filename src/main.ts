@@ -624,9 +624,9 @@ class RadioheadAdapter extends utils.Adapter {
           this.retransmissionsCountStart = 0;
           this.rhs.resetRetransmissions();
 
-          for (const id of infoCounters) {
-            this[id] = 0;
-            await this.setStateAsync('info.' + id, 0, true);
+          for (const infoCounterId of infoCounters) {
+            this[infoCounterId] = 0;
+            await this.setStateAsync('info.' + infoCounterId, 0, true);
           }
 
           await this.setStateAsync(id, state, true);
