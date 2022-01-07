@@ -3,6 +3,18 @@
         "name": "radiohead",
         "version": "1.3.0",
         "news": {
+            "1.3.0": {
+                "en": "Handling of serialport close events, Try to reinit on serialport open errors",
+                "de": "Close-Events der seriellen Schnittstelle werden nun erkannt und lösen einen Re-Init aus, Schnittstellenfehler beim Adapterstart lösen nun ebenfalls einen Re-Init aus",
+                "ru": "Обработка событий закрытия последовательного порта, попытка перезагрузки при ошибках открытия последовательного порта",
+                "pt": "Tratamento de eventos de fechamento de porta serial, tente reinicializar em erros de abertura de porta serial",
+                "nl": "Afhandeling van gebeurtenissen voor het sluiten van seriële poorten, probeer opnieuw te starten bij open fouten van seriële poorten",
+                "fr": "Gestion des événements de fermeture du port série, essayez de réinitialiser sur les erreurs d'ouverture du port série",
+                "it": "Gestione degli eventi di chiusura della porta seriale, prova a ripristinare gli errori di apertura della porta seriale",
+                "es": "Manejo de eventos de cierre de puerto serie, intente reiniciar en errores de apertura de puerto serie",
+                "pl": "Obsługa zdarzeń zamknięcia portu szeregowego, spróbuj ponownie uruchomić przy błędach otwarcia portu szeregowego",
+                "zh-cn": "处理串口关闭事件，尝试重新初始化串口打开错误"
+            },
             "1.2.0": {
                 "en": "Use stringified json for data.incoming state",
                 "de": "Verwenden Sie stringified json für data.incoming state",

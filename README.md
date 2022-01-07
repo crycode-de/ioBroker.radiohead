@@ -34,6 +34,15 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 
 ## Changelog
 
+### 1.3.0 (2022-01-07)
+* (crycode-de) Handling of serial port close events
+* (crycode-de) Try to reinitialize the serial port on close/errors
+* (crycode-de) Fixed spelling of indicator role
+* (crycode-de) Log messages now starts with an uppercase letter
+* (crycode-de) Debug log RHS version on adapter startup
+* (crycode-de) Some internal refracturing
+* (crycode-de) Updated dependencies
+
 ### 1.2.0 (2021-09-17)
 * (crycode-de) Use stringified json for data.incoming state
 
