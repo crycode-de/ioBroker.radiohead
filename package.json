@@ -1,6 +1,6 @@
 {
   "name": "iobroker.radiohead",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
   "author": {
     "name": "Peter Müller",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@iobroker/adapter-core": "^2.5.1",
     "core-decorators": "^0.20.0",
-    "radiohead-serial": "^4.2.0"
+    "radiohead-serial": "^4.3.0"
   },
   "devDependencies": {
     "@iobroker/testing": "^2.5.2",
@@ -29,12 +29,12 @@
     "@types/chai-as-promised": "^7.1.4",
     "@types/gulp": "^4.0.9",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.11.17",
+    "@types/node": "^16.11.19",
     "@types/proxyquire": "^1.3.28",
     "@types/sinon": "^10.0.6",
     "@types/sinon-chai": "^3.2.8",
-    "@typescript-eslint/eslint-plugin": "^5.8.1",
-    "@typescript-eslint/parser": "^5.8.1",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
     "axios": "^0.24.0",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",

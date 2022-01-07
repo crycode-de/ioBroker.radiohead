@@ -1,14 +1,14 @@
 /**
  * RadioHead adapter for ioBroker
  *
- * Copyright (c) 2019-2020 Peter Müller <peter@crycode.de>
+ * Copyright (c) 2019-2022 Peter Müller <peter@crycode.de>
  */
 
 import * as utils from '@iobroker/adapter-core';
 
 import { autobind } from 'core-decorators';
 
-import { RadioHeadSerial, RH_ReceivedMessage as ReceivedMessage } from 'radiohead-serial';
+import { RadioHeadSerial, RH_ReceivedMessage as ReceivedMessage, version as RHS_VERSION } from 'radiohead-serial';
 
 import { parseNumber, parseAddress, hexNumber, round, formatBufferAsHexString } from './lib/tools';
 
@@ -45,7 +45,7 @@ class RadioheadAdapter extends utils.Adapter {
   private rhs: RadioHeadSerial | null = null;
 
   /**
-   * Conuter for received RadioHead messages.
+   * Counter for received RadioHead messages.
    */
   private receivedCount: number = 0;
 
@@ -82,6 +82,23 @@ class RadioheadAdapter extends utils.Adapter {
   private outgoingMatches: Record<string, OutgoingDataMatch> = {};
 
   /**
+   * If the serial port should be reopened on port close/errors.
+   * Will be set to false on adapter unload.
+   */
+  private reopenPortOnClose: boolean = true;
+
+  /**
+   * RHS init retry counter.
+   * Will be increased on each init retry and set to 0 on successfull init.
+   */
+  private rhsInitRetryCounter: number = 0;
+
+  /**
+   * Timeout for delayed init retry.
+   */
+  private rhsInitRetryTimeout: NodeJS.Timeout | null = null;
+
+  /**
    * Constructor to create a new instance of the adapter.
    * @param options The adapter options.
    */
@@ -105,6 +122,9 @@ class RadioheadAdapter extends utils.Adapter {
   private async onReady(): Promise<void> {
     // Reset the connection indicator during startup
     this.setState('info.connection', false, true);
+
+    // Debug log the RHS version
+    this.log.debug('RHS version: ' + RHS_VERSION);
 
     // Debug log the current config
     this.log.debug('config: ' + JSON.stringify(this.config));
@@ -130,7 +150,7 @@ class RadioheadAdapter extends utils.Adapter {
     // setup matcher for incoming data
     this.getForeignObjects(this.namespace + '.data.in.*', 'state', (err, objects) => {
       if (err) {
-        this.log.error('error loading incoming data objects');
+        this.log.error('Error loading incoming data objects');
         return;
       }
 
@@ -140,7 +160,7 @@ class RadioheadAdapter extends utils.Adapter {
         const parts = obj.native.data.split(';');
         parts.forEach((part, partIdx) => {
           if (part.length === 0) {
-            this.log.warn(`empty data part #${partIdx} in object ${objectId} ignored`);
+            this.log.warn(`Empty data part #${partIdx} in object ${objectId} ignored`);
             return;
           }
           const data = part.trim().split(',');
@@ -169,7 +189,7 @@ class RadioheadAdapter extends utils.Adapter {
     // setup mapping for outgoing data
     this.getForeignObjects(this.namespace + '.data.out.*', 'state', (err, objects) => {
       if (err) {
-        this.log.error('error loading outgoing data objects');
+        this.log.error('Error loading outgoing data objects');
         return;
       }
 
@@ -198,42 +218,94 @@ class RadioheadAdapter extends utils.Adapter {
     // set the start value for retransmissions counter
     this.retransmissionsCountStart = this.retransmissionsCount;
 
-    // Init the radiohead-serial and catch/log possible errors
-    try {
-      this.rhs = new RadioHeadSerial({
-        port: this.config.port,
-        baud: parseInt(this.config.baud, 10),
-        address: this.address,
-        reliable: this.config.reliable,
-        autoInit: false
-      });
-
-      this.rhs.on('error', this.onRhsError);
-      this.rhs.on('data', this.onRhsData);
-
-      // enable promiscuous mode if configured
-      if (this.config.promiscuous) {
-        this.rhs.setPromiscuous(true);
-        this.log.info('promiscuous mode enabled');
-      }
-
-      await this.rhs.init()
-        .then(() => {
-          this.log.info('manager initialized, my RadioHead address is ' + hexNumber(this.address));
-
-          // set the connection state to connected
-          this.setState('info.connection', true, true);
-        });
-
-    } catch (err) {
-      this.log.warn(`Error on serial port init: ` + err);
-      this.log.warn(`Adapter will not work...`);
-      return;
-    }
+    // Init the radiohead-serial
+    await this.rhsInit();
 
     // subscribe needed states
     this.subscribeStates('actions.*');
     this.subscribeStates('data.out.*');
+  }
+
+  /**
+   * Initialize the RadioHeadSerial instance and connect to the serial port.
+   *
+   * On first call this will create a new RHS instance and set it up.
+   * On next calls this will reinitialize the existing RHS instance to reinitialize the serial port.
+   */
+  private async rhsInit (): Promise<void> {
+    try {
+      // setup rhs instance only on first init
+      if (!this.rhs) {
+        this.rhs = new RadioHeadSerial({
+          port: this.config.port,
+          baud: parseInt(this.config.baud, 10),
+          address: this.address,
+          reliable: this.config.reliable,
+          autoInit: false
+        });
+
+        this.rhs.on('error', this.onRhsError);
+        this.rhs.on('close', this.onRhsClose);
+        this.rhs.on('data', this.onRhsData);
+
+        // enable promiscuous mode if configured
+        if (this.config.promiscuous) {
+          this.rhs.setPromiscuous(true);
+          this.log.info('Promiscuous mode enabled');
+        }
+      }
+
+      // init of rhs instance may be called multiple times, e.g. when the port was closed
+      await this.rhs.init();
+
+      this.log.info('Manager initialized, my RadioHead address is ' + hexNumber(this.address));
+
+      // reset the retry counter
+      this.rhsInitRetryCounter = 0;
+
+      // set the connection state to connected
+      this.setState('info.connection', true, true);
+
+    } catch (err) {
+      this.log.warn(`Error on serial port initialization: ${err}`);
+      this.rhsInitRetry();
+      return;
+    }
+  }
+
+  /**
+   * Start a RHS initialize retry.
+   *
+   * This will setup a timeout which will then call a RHS init.
+   * The timeout time depends on the retry counter.
+   */
+  private rhsInitRetry (): void {
+    // stop possible already existing timeout
+    if (this.rhsInitRetryTimeout) {
+      clearTimeout(this.rhsInitRetryTimeout);
+      this.rhsInitRetryTimeout = null;
+    }
+
+    // increase retry counter
+    this.rhsInitRetryCounter++;
+
+    // define timeout time in seconds to increase the time between the first 5 tries
+    let timeoutTime: number;
+    switch (this.rhsInitRetryCounter) {
+      case 1: timeoutTime = 5; break;
+      case 2: timeoutTime = 10; break;
+      case 3: timeoutTime = 30; break;
+      case 4: timeoutTime = 60; break;
+      default: timeoutTime = 120; break;
+    }
+
+    this.log.info(`Trying to reinitialize in ${timeoutTime}s (try #${this.rhsInitRetryCounter})`);
+
+    // set timeout to init again
+    this.rhsInitRetryTimeout = setTimeout(() => {
+      this.rhsInitRetryTimeout = null;
+      this.rhsInit();
+    }, timeoutTime * 1000);
   }
 
   /**
@@ -242,15 +314,29 @@ class RadioheadAdapter extends utils.Adapter {
   @autobind
   private async onUnload(callback: () => void): Promise<void> {
     try {
+      // don't reopen the port
+      this.reopenPortOnClose = false;
+
+      // clear possible reinitialize timeout
+      if (this.rhsInitRetryTimeout) {
+        clearTimeout(this.rhsInitRetryTimeout);
+        this.rhsInitRetryTimeout = null;
+      }
+
       // close the serial port if rhs is initialized
       if (this.rhs !== null) {
-        this.log.info('closing serial port...');
-        await this.rhs.close();
-        this.log.info('serial port closed');
+        this.log.info('Closing serial port...');
+        try {
+          await this.rhs.close();
+        } catch (e) {
+          this.log.warn(`Error closing serial port: ${e}`);
+        }
         this.rhs = null;
       }
+
       // reset connection state
-      this.setState('info.connection', false, true);
+      await this.setStateAsync('info.connection', false, true);
+
       callback();
     } catch (e) {
       callback();
@@ -263,7 +349,24 @@ class RadioheadAdapter extends utils.Adapter {
    */
   @autobind
   private onRhsError (error: Error): void {
-    this.log.error('RadioHeadSerial Errro: ' + error);
+    this.log.error('RadioHeadSerial Error: ' + error);
+  }
+
+  /**
+   * Handle RadioHeadSerial close events.
+   */
+  @autobind
+  private onRhsClose (): void {
+    this.setState('info.connection', false, true);
+
+    // check if the port should be reopened
+    if (this.reopenPortOnClose) {
+      this.log.warn('Serial port closed');
+      this.rhsInitRetry();
+    } else {
+      // close was expected... just log an info
+      this.log.info('Serial port closed');
+    }
   }
 
   /**
@@ -295,7 +398,7 @@ class RadioheadAdapter extends utils.Adapter {
 
     // log data if enabled
     if (this.config.logAllData) {
-      this.log.info(`received <${formatBufferAsHexString(msg.data)}> from ${hexNumber(msg.headerFrom)} to ${hexNumber(msg.headerTo)} msgID ${hexNumber(msg.headerId)}`);
+      this.log.info(`Received <${formatBufferAsHexString(msg.data)}> from ${hexNumber(msg.headerFrom)} to ${hexNumber(msg.headerTo)} msgID ${hexNumber(msg.headerId)}`);
     }
 
     const data: DataArray = [...msg.data]; // convert buffer to array
@@ -516,7 +619,7 @@ class RadioheadAdapter extends utils.Adapter {
       // handle special states
       switch (id) {
         case this.namespace + '.actions.resetCounters':
-          this.log.info('reset information counters');
+          this.log.info('Reset information counters');
 
           this.retransmissionsCountStart = 0;
           this.rhs.resetRetransmissions();
@@ -581,12 +684,12 @@ class RadioheadAdapter extends utils.Adapter {
   @autobind
   private async rhsSend (to: number, buf: Buffer, sendingObjectId: string, stateAck?: ioBroker.State): Promise<Error | undefined> {
     if (!this.rhs || !this.rhs.isInitDone()) {
-      this.log.warn(`unable to send new value of '${sendingObjectId}' because we are not ready to send`);
+      this.log.warn(`Unable to send new value of '${sendingObjectId}' because we are not ready to send`);
       return Promise.resolve(new Error('Unable to send, not ready'));
     }
 
     if (this.config.logAllData) {
-      this.log.info(`sending <${formatBufferAsHexString(buf)}> to ${hexNumber(to)}`);
+      this.log.info(`Sending <${formatBufferAsHexString(buf)}> to ${hexNumber(to)}`);
     }
 
     let err: Error | undefined = undefined;
@@ -605,7 +708,7 @@ class RadioheadAdapter extends utils.Adapter {
         // update error info
         this.setStateAsync('info.sentErrorCount', ++this.sentErrorCount, true);
         this.setStateAsync('info.lastSentError', new Date().toISOString(), true);
-        this.log.warn(`error sending message for ${sendingObjectId} to ${hexNumber(to)} - ${e}`);
+        this.log.warn(`Error sending message for ${sendingObjectId} to ${hexNumber(to)} - ${e}`);
         err = e;
       })
       // in any case update the retransmissions counter
@@ -626,7 +729,7 @@ class RadioheadAdapter extends utils.Adapter {
       if (obj.command === 'send') {
         // we should send some message...
         if (typeof obj.message !== 'object') {
-          this.log.warn(`invalid send message from ${obj.from} received ` + JSON.stringify(obj.message));
+          this.log.warn(`Invalid send message from ${obj.from} received ` + JSON.stringify(obj.message));
           return;
         }
 
@@ -641,7 +744,7 @@ class RadioheadAdapter extends utils.Adapter {
         }
 
         if (to === null || buf === null || buf.length === 0) {
-          this.log.warn(`invalid send message from ${obj.from} received ` + JSON.stringify(obj.message));
+          this.log.warn(`Invalid send message from ${obj.from} received ` + JSON.stringify(obj.message));
           return;
         }
 
