@@ -19,7 +19,7 @@
     "url": "https://github.com/crycode-de/ioBroker.radiohead"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.5.1",
+    "@iobroker/adapter-core": "^2.6.0",
     "core-decorators": "^0.20.0",
     "radiohead-serial": "^4.3.0"
   },
