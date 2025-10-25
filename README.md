@@ -32,8 +32,16 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 **This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
 
 ## Changelog
+<!--
+    Placeholder for the next version (at the beginning of the line):
+    ### **WORK IN PROGRESS**
+-->
+### **WORK IN PROGRESS**
+
+* (crycode-de) Updated Sentry DSN
 
 ### 1.3.0 (2022-01-07)
+
 * (crycode-de) Handling of serial port close events
 * (crycode-de) Try to reinitialize the serial port on close/errors
 * (crycode-de) Fixed spelling of indicator role
@@ -43,47 +51,56 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 * (crycode-de) Updated dependencies
 
 ### 1.2.0 (2021-09-17)
+
 * (crycode-de) Use stringified json for data.incoming state
 
 ### 1.1.1 (2021-01-09)
+
 * (crycode-de) Small fixes
 * (crycode-de) Updated dependencies
 
 ### 1.1.0 (2020-12-23)
+
 * (crycode-de) Added Sentry error reporting
 * (crycode-de) Updated dependencies
 * (crycode-de) Compatibility with Node.js 14.x
 * (crycode-de) Optimized npm package
 
 ### 1.0.7 (2020-06-01)
+
 * (crycode-de) Fixed bug on deleting incoming data entries.
 
 ### 1.0.5 (2020-04-14)
+
 * (crycode-de) Fixed bug in grouping in/out data.
 * (crycode-de) Added missing translations.
 * (crycode-de) Fixed bug with promiscuous mode.
 * (crycode-de) Updated dependencies.
 
 ### 1.0.4 (2020-02-03)
+
 * (crycode-de) Updated connectionType and dataSource in io-package.json.
 
 ### 1.0.3 (2020-01-23)
+
 * (crycode-de) Better handling of changed objects in admin.
 * (crycode-de) Added `connectionType` in `io-package.json` and updated dependencies.
 
 ### 1.0.2 (2019-09-08)
+
 * (crycode-de) dependency updates and bugfixes
 
 ### 1.0.1 (2019-07-30)
+
 * (crycode-de) license  update
 
 ### 1.0.0 (2019-07-28)
-* (crycode-de) initial release
 
+* (crycode-de) initial release
 
 ## License
 
-Copyright (c) 2019-2022 Peter Müller <peter@crycode.de>
+Copyright (c) 2019-2025 Peter Müller <peter@crycode.de>
 
 ## GNU General Public License
 
