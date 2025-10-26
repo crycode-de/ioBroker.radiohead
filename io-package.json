@@ -13,7 +13,8 @@
                 "it": "Gestione degli eventi di chiusura della porta seriale, prova a ripristinare gli errori di apertura della porta seriale",
                 "es": "Manejo de eventos de cierre de puerto serie, intente reiniciar en errores de apertura de puerto serie",
                 "pl": "Obsługa zdarzeń zamknięcia portu szeregowego, spróbuj ponownie uruchomić przy błędach otwarcia portu szeregowego",
-                "zh-cn": "处理串口关闭事件，尝试重新初始化串口打开错误"
+                "zh-cn": "处理串口关闭事件，尝试重新初始化串口打开错误",
+                "uk": "Обробка подій закриття послідовного порту, спроба повторного запуску під час помилок відкриття послідовного порту"
             },
             "1.2.0": {
                 "en": "Use stringified json for data.incoming state",
@@ -25,7 +26,8 @@
                 "it": "Usa json stringato per lo stato data.incoming",
                 "es": "Utilice json en cadena para el estado de entrada de datos",
                 "pl": "Użyj stringified json dla stanu data.incoming",
-                "zh-cn": "将字符串化的 json 用于 data.incoming 状态"
+                "zh-cn": "将字符串化的 json 用于 data.incoming 状态",
+                "uk": "Використовуйте stringified json для стану data.incoming"
             },
             "1.1.1": {
                 "en": "Small fixes",
@@ -37,7 +39,8 @@
                 "it": "Piccole correzioni",
                 "es": "Pequeñas correcciones",
                 "pl": "Małe poprawki",
-                "zh-cn": "小修正"
+                "zh-cn": "小修正",
+                "uk": "Невеликі виправлення"
             },
             "1.1.0": {
                 "en": "Added Sentry, Updated dependencies",
@@ -49,7 +52,8 @@
                 "it": "Sentinella aggiunta, dipendenze aggiornate",
                 "es": "Centinela agregado, dependencias actualizadas",
                 "pl": "Dodano Działko, Zaktualizowano zależności",
-                "zh-cn": "添加了哨兵，更新了依赖项"
+                "zh-cn": "添加了哨兵，更新了依赖项",
+                "uk": "Додано Sentry, оновлено залежності"
             },
             "1.0.7": {
                 "en": "Fixed bug on deleting incoming data entries.",
@@ -61,7 +65,8 @@
                 "it": "Corretto errore nell'eliminazione delle voci di dati in arrivo.",
                 "es": "Se corrigió un error al eliminar las entradas de datos entrantes.",
                 "pl": "Naprawiono błąd usuwania wpisów danych przychodzących.",
-                "zh-cn": "修复了删除传入数据条目的错误。"
+                "zh-cn": "修复了删除传入数据条目的错误。",
+                "uk": "Виправлена ​​помилка видалення вхідних даних."
             },
             "1.0.5": {
                 "en": "Fixed bug in grouping in/out data. Added missing translations. Fixed bug with promiscuous mode. Updated dependencies.",
@@ -73,7 +78,8 @@
                 "it": "Corretto errore nel raggruppamento dei dati in / out. Aggiunte traduzioni mancanti. Bug risolto con modalità promiscua. Dipendenze aggiornate.",
                 "es": "Se corrigió un error en la agrupación de datos de entrada / salida. Se agregaron traducciones faltantes. Error corregido con el modo promiscuo. Dependencias actualizadas.",
                 "pl": "Naprawiono błąd w grupowaniu danych we / wy. Dodano brakujące tłumaczenia. Naprawiono błąd w trybie rozwiązanym. Zaktualizowano zależności.",
-                "zh-cn": "修复了分组输入/输出数据的错误。添加了缺少的翻译。修复了混杂模式下的错误。更新了依赖性。"
+                "zh-cn": "修复了分组输入/输出数据的错误。添加了缺少的翻译。修复了混杂模式下的错误。更新了依赖性。",
+                "uk": "Виправлена ​​помилка групування вхідних/вихідних даних. Додано відсутні переклади. Виправлена ​​помилка з безладним статевим життям. Оновлені залежності."
             },
             "1.0.4": {
                 "en": "Updated connectionType and dataSource in io-package.json",
@@ -85,58 +91,10 @@
                 "it": "Tipo di connessione e dataSource aggiornati in io-package.json",
                 "es": "ConnectionType y dataSource actualizados en io-package.json",
                 "pl": "Zaktualizowano typ połączenia i źródło danych w io-package.json",
-                "zh-cn": "更新了io-package.json中的connectionType和dataSource"
-            },
-            "1.0.3": {
-                "en": "Better handling of changed objects in admin, added connectionType in io-package.json and updated dependencies.",
-                "de": "Besserer Umgang mit geänderten Objekten in Admin, connectionType in io-package.json hinzugefügt und Abhängigkeiten aktualisiert.",
-                "ru": "Улучшена обработка измененных объектов в админке, добавлен connectionType в io-package.json и обновлены зависимости.",
-                "pt": "Melhor manipulação de objetos alterados no admin, adição de connectionType no io-package.json e dependências atualizadas.",
-                "nl": "Betere afhandeling van gewijzigde objecten in admin, toegevoegd connectionType in io-package.json en bijgewerkte afhankelijkheden.",
-                "fr": "Meilleure gestion des objets modifiés dans admin, ajout de connectionType dans io-package.json et mises à jour des dépendances.",
-                "it": "Migliore gestione degli oggetti modificati in admin, aggiunta connectionType in io-package.json e dipendenze aggiornate.",
-                "es": "Mejor manejo de objetos modificados en el administrador, tipo de conexión agregado en io-package.json y dependencias actualizadas.",
-                "pl": "Lepsza obsługa zmienionych obiektów w adminie, dodane connectionType w pliku io-package.json i zaktualizowane zależności.",
-                "zh-cn": "更好地处理admin中更改的对象，在io-package.json中添加了connectionType和更新了依赖项。"
-            },
-            "1.0.2": {
-                "en": "Dependency updates and bugfixes",
-                "de": "Abhängigkeitsupdates und Bugfixes",
-                "ru": "Обновления и исправления зависимостей",
-                "pt": "Atualizações de dependência e correções de bugs",
-                "nl": "Afhankelijkheidsupdates en bugfixes",
-                "fr": "Mises à jour des dépendances et corrections de bugs",
-                "it": "Aggiornamenti e correzioni di dipendenze",
-                "es": "Actualizaciones de dependencia y correcciones de errores",
-                "pl": "Aktualizacje zależności i poprawki błędów",
-                "zh-cn": "依赖关系更新和错误修正"
-            },
-            "1.0.1": {
-                "en": "license  update",
-                "de": "Lizenz-Update",
-                "ru": "обновление лицензии",
-                "pt": "atualização de licença",
-                "nl": "licentie-update",
-                "fr": "mise à jour de licence",
-                "it": "aggiornamento della licenza",
-                "es": "actualización de licencia",
-                "pl": "aktualizacja licencji",
-                "zh-cn": "许可证更新"
-            },
-            "1.0.0": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
+                "zh-cn": "更新了io-package.json中的connectionType和dataSource",
+                "uk": "Оновлено ConnectionType і dataSource в io-package.json"
             }
         },
-        "title": "RadioHead",
         "titleLang": {
             "en": "RadioHead",
             "de": "RadioHead",
@@ -147,7 +105,8 @@
             "it": "RadioHead",
             "es": "RadioHead",
             "pl": "RadioHead",
-            "zh-cn": "RadioHead"
+            "zh-cn": "RadioHead",
+            "uk": "RadioHead"
         },
         "desc": {
             "en": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
@@ -159,7 +118,8 @@
             "it": "Questo è un adattatore ioBroker per integrare una rete RadioHead utilizzando un'interfaccia seriale.",
             "es": "Este es un ioBroker-Adapter para integrar una red RadioHead usando una interfaz serial.",
             "pl": "Jest to adapter ioBroker do integracji sieci RadioHead za pomocą interfejsu szeregowego.",
-            "zh-cn": "这是一个使用串行接口集成RadioHead网络的ioBroker-Adapter。"
+            "zh-cn": "这是一个使用串行接口集成RadioHead网络的ioBroker-Adapter。",
+            "uk": "Це ioBroker-адаптер для інтеграції мережі RadioHead за допомогою послідовного інтерфейсу."
         },
         "docs": {
             "en": "docs/en/radiohead.md",
@@ -176,9 +136,11 @@
             "RHDatagram",
             "RHReliableDatagram"
         ],
-        "license": "GPL-2.0-only",
+        "licenseInformation": {
+            "license": "GPL-2.0-only",
+            "type": "free"
+        },
         "platform": "Javascript/Node.js",
-        "main": "build/main.js",
         "icon": "radiohead.png",
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/crycode-de/ioBroker.radiohead/master/admin/radiohead.png",
@@ -188,11 +150,11 @@
         "type": "protocols",
         "connectionType": "local",
         "dataSource": "push",
+        "tier": 3,
         "adminUI": {
             "config": "html"
         },
         "compact": true,
-        "materialize": true,
         "messagebox": true,
         "dependencies": [
             {
