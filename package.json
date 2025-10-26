@@ -18,6 +18,9 @@
     "type": "git",
     "url": "https://github.com/crycode-de/ioBroker.radiohead"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^3.3.2",
     "core-decorators": "^0.20.0",
