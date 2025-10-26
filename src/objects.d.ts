@@ -1,4 +1,3 @@
-
 declare interface IncomingDataObject extends ioBroker.StateObject {
   native: IncomingDataObjectNative;
 }

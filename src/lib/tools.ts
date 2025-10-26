@@ -42,10 +42,10 @@ export function hexNumber (num: number): string {
  * @return          The rounded number.
  */
 export function round (num: number, precision: number): number {
-  if(precision == 0) return Math.round(num);
+  if (precision === 0) return Math.round(num);
 
   let exp = 1;
-  for(let i=0; i < precision; i++) {
+  for (let i = 0; i < precision; i++) {
     exp *= 10;
   }
 

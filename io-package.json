@@ -188,12 +188,20 @@
         "type": "protocols",
         "connectionType": "local",
         "dataSource": "push",
+        "adminUI": {
+            "config": "html"
+        },
         "compact": true,
         "materialize": true,
         "messagebox": true,
         "dependencies": [
             {
-                "js-controller": ">=2.0.0"
+                "js-controller": ">=6.0.11"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=7.6.17"
             }
         ],
         "plugins": {

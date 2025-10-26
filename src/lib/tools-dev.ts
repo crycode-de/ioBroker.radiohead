@@ -4,8 +4,8 @@ import axios from 'axios';
  * Tests whether the given variable is really an Array
  * @param it The variable to test
  */
-export function isArray(it: unknown): it is any[] {
-  if (Array.isArray != null) return Array.isArray(it);
+export function isArray (it: unknown): it is unknown[] {
+  if (Array.isArray !== null) return Array.isArray(it);
   return Object.prototype.toString.call(it) === '[object Array]';
 }
 
@@ -14,14 +14,14 @@ export function isArray(it: unknown): it is any[] {
  * @param text The text to translate
  * @param targetLang The target languate
  */
-export async function translateText(text: string, targetLang: string): Promise<string> {
+export async function translateText (text: string, targetLang: string): Promise<string> {
   if (targetLang === 'en') return text;
   try {
     const url = `http://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}&ie=UTF-8&oe=UTF-8`;
-    const response = await axios({url, timeout: 5000});
+    const response = await axios<unknown[][][]>({ url, timeout: 5000 });
     if (isArray(response.data)) {
       // we got a valid response
-      return response.data[0][0][0];
+      return response.data[0][0][0] as string;
     }
     throw new Error('Invalid response for translate request');
   } catch (e) {

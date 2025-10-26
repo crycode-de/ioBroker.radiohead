@@ -38,6 +38,8 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 -->
 ### **WORK IN PROGRESS**
 
+* (crycode-de) Updated to latest ioBroker adapter toolset
+* (crycode-de) Updated dependencies and fixed resulting issues
 * (crycode-de) Updated Sentry DSN
 
 ### 1.3.0 (2022-01-07)

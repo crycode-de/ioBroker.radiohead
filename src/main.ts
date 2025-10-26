@@ -1,7 +1,7 @@
 /**
  * RadioHead adapter for ioBroker
  *
- * Copyright (c) 2019-2022 Peter Müller <peter@crycode.de>
+ * Copyright (c) 2019-2025 Peter Müller <peter@crycode.de>
  */
 
 import * as utils from '@iobroker/adapter-core';
@@ -10,7 +10,7 @@ import { autobind } from 'core-decorators';
 
 import { RadioHeadSerial, RH_ReceivedMessage as ReceivedMessage, version as RHS_VERSION } from 'radiohead-serial';
 
-import { parseNumber, parseAddress, hexNumber, round, formatBufferAsHexString } from './lib/tools';
+import { formatBufferAsHexString, hexNumber, parseAddress, parseNumber, round } from './lib/tools';
 
 // Augment the adapter.config object with the actual types
 declare global {
@@ -29,7 +29,7 @@ declare global {
   }
 }
 
-const infoCounters: ('receivedCount'|'retransmissionsCount'|'sentErrorCount'|'sentOkCount')[] = ['receivedCount', 'retransmissionsCount', 'sentErrorCount', 'sentOkCount'];
+const infoCounters: ('receivedCount' | 'retransmissionsCount' | 'sentErrorCount' | 'sentOkCount')[] = [ 'receivedCount', 'retransmissionsCount', 'sentErrorCount', 'sentOkCount' ];
 
 class RadioheadAdapter extends utils.Adapter {
 
@@ -96,13 +96,13 @@ class RadioheadAdapter extends utils.Adapter {
   /**
    * Timeout for delayed init retry.
    */
-  private rhsInitRetryTimeout: NodeJS.Timeout | null = null;
+  private rhsInitRetryTimeout: ioBroker.Timeout | undefined = undefined;
 
   /**
    * Constructor to create a new instance of the adapter.
    * @param options The adapter options.
    */
-  public constructor(options: Partial<utils.AdapterOptions> = {}) {
+  public constructor (options: Partial<utils.AdapterOptions> = {}) {
     super({
       ...options,
       name: 'radiohead',
@@ -119,9 +119,9 @@ class RadioheadAdapter extends utils.Adapter {
    * Is called when databases are connected and adapter received configuration.
    */
   @autobind
-  private async onReady(): Promise<void> {
+  private async onReady (): Promise<void> {
     // Reset the connection indicator during startup
-    this.setState('info.connection', false, true);
+    await this.setState('info.connection', false, true);
 
     // Debug log the RHS version
     this.log.debug('RHS version: ' + RHS_VERSION);
@@ -140,10 +140,10 @@ class RadioheadAdapter extends utils.Adapter {
     for (const id of infoCounters) {
       const state = await this.getStateAsync('info.' + id);
       this.log.debug(`loaded ${this.namespace}.info.${id} ` + JSON.stringify(state));
-      if(state) {
+      if (state) {
         this[id] = state.val as number;
       } else {
-        await this.setStateAsync('info.' + id, 0, true);
+        await this.setState('info.' + id, 0, true);
       }
     }
 
@@ -177,7 +177,7 @@ class RadioheadAdapter extends utils.Adapter {
             bufferDataStart: data.indexOf('D'),
             factor: obj.native.factor,
             offset: obj.native.offset,
-            decimals: obj.native.decimals
+            decimals: obj.native.decimals,
           };
           this.incomingMatches.push(dataMatch);
         });
@@ -203,13 +203,13 @@ class RadioheadAdapter extends utils.Adapter {
         });
 
         this.outgoingMatches[objectId] = {
-          to: parseAddress(obj.native.toAddress) || 0,
-          data: data.map((d: any) => Buffer.from(d)),
+          to: parseAddress(obj.native.toAddress) ?? 0,
+          data: data.map((d) => Buffer.from(d as number[])),
           role: obj.common.role,
           type: obj.common.type || 'number',
           bufferDataType: obj.native.dataType,
-          bufferDataStart: parts[0].indexOf('D')
-        }
+          bufferDataStart: parts[0].indexOf('D'),
+        };
       }
 
       this.log.debug(`loaded ${Object.keys(this.outgoingMatches).length} outgoing matches`);
@@ -241,7 +241,7 @@ class RadioheadAdapter extends utils.Adapter {
           baud: parseInt(this.config.baud, 10),
           address: this.address,
           reliable: this.config.reliable,
-          autoInit: false
+          autoInit: false,
         });
 
         this.rhs.on('error', this.onRhsError);
@@ -264,7 +264,7 @@ class RadioheadAdapter extends utils.Adapter {
       this.rhsInitRetryCounter = 0;
 
       // set the connection state to connected
-      this.setState('info.connection', true, true);
+      await this.setState('info.connection', true, true);
 
     } catch (err) {
       this.log.warn(`Error on serial port initialization: ${err}`);
@@ -292,19 +292,29 @@ class RadioheadAdapter extends utils.Adapter {
     // define timeout time in seconds to increase the time between the first 5 tries
     let timeoutTime: number;
     switch (this.rhsInitRetryCounter) {
-      case 1: timeoutTime = 5; break;
-      case 2: timeoutTime = 10; break;
-      case 3: timeoutTime = 30; break;
-      case 4: timeoutTime = 60; break;
-      default: timeoutTime = 120; break;
+      case 1:
+        timeoutTime = 5;
+        break;
+      case 2:
+        timeoutTime = 10;
+        break;
+      case 3:
+        timeoutTime = 30;
+        break;
+      case 4:
+        timeoutTime = 60;
+        break;
+      default:
+        timeoutTime = 120;
+        break;
     }
 
     this.log.info(`Trying to reinitialize in ${timeoutTime}s (try #${this.rhsInitRetryCounter})`);
 
     // set timeout to init again
-    this.rhsInitRetryTimeout = setTimeout(() => {
+    this.rhsInitRetryTimeout = this.setTimeout(() => {
       this.rhsInitRetryTimeout = null;
-      this.rhsInit();
+      void this.rhsInit();
     }, timeoutTime * 1000);
   }
 
@@ -312,14 +322,14 @@ class RadioheadAdapter extends utils.Adapter {
    * Is called when adapter shuts down - callback has to be called under any circumstances!
    */
   @autobind
-  private async onUnload(callback: () => void): Promise<void> {
+  private async onUnload (callback: () => void): Promise<void> {
     try {
       // don't reopen the port
       this.reopenPortOnClose = false;
 
       // clear possible reinitialize timeout
       if (this.rhsInitRetryTimeout) {
-        clearTimeout(this.rhsInitRetryTimeout);
+        this.clearTimeout(this.rhsInitRetryTimeout);
         this.rhsInitRetryTimeout = null;
       }
 
@@ -335,10 +345,10 @@ class RadioheadAdapter extends utils.Adapter {
       }
 
       // reset connection state
-      await this.setStateAsync('info.connection', false, true);
+      await this.setState('info.connection', false, true);
 
       callback();
-    } catch (e) {
+    } catch (_err) {
       callback();
     }
   }
@@ -349,7 +359,7 @@ class RadioheadAdapter extends utils.Adapter {
    */
   @autobind
   private onRhsError (error: Error): void {
-    this.log.error('RadioHeadSerial Error: ' + error);
+    this.log.error(`RadioHeadSerial Error: ${error}`);
   }
 
   /**
@@ -357,7 +367,7 @@ class RadioheadAdapter extends utils.Adapter {
    */
   @autobind
   private onRhsClose (): void {
-    this.setState('info.connection', false, true);
+    void this.setState('info.connection', false, true);
 
     // check if the port should be reopened
     if (this.reopenPortOnClose) {
@@ -392,34 +402,35 @@ class RadioheadAdapter extends utils.Adapter {
    * @param msg The received RadioHead message.
    */
   @autobind
-  private onRhsData (msg: ReceivedMessage): void {
-    this.setStateAsync('info.receivedCount', ++this.receivedCount, true);
-    this.setStateAsync('info.lastReceived', new Date().toISOString(), true);
+  private async onRhsData (msg: ReceivedMessage): Promise<void> {
+    await Promise.all([
+      this.setState('info.receivedCount', ++this.receivedCount, true),
+      this.setState('info.lastReceived', new Date().toISOString(), true),
+    ]);
 
     // log data if enabled
     if (this.config.logAllData) {
       this.log.info(`Received <${formatBufferAsHexString(msg.data)}> from ${hexNumber(msg.headerFrom)} to ${hexNumber(msg.headerTo)} msgID ${hexNumber(msg.headerId)}`);
     }
 
-    const data: DataArray = [...msg.data]; // convert buffer to array
+    const data: DataArray = [ ...msg.data ]; // convert buffer to array
 
     // set the msg as incoming data, replacing the data buffer by the array
-    this.setStateAsync('data.incoming', { val: JSON.stringify({...msg, data}) }, true);
+    await this.setState('data.incoming', { val: JSON.stringify({ ...msg, data }) }, true);
 
     // check for matches
-    this.incomingMatches.forEach((dataMatch) => {
-
+    for (const dataMatch of this.incomingMatches) {
       // filter addresses
-      if (msg.headerFrom !== dataMatch.from && dataMatch.from !== null) return;
-      if (msg.headerTo !== dataMatch.to && dataMatch.to !== null) return;
+      if (msg.headerFrom !== dataMatch.from && dataMatch.from !== null) continue;
+      if (msg.headerTo !== dataMatch.to && dataMatch.to !== null) continue;
 
       // check data
       if (this.checkDataMatch(data, dataMatch.data)) {
         // data matched!
         this.log.debug(`received data ${JSON.stringify(msg)} matched ${JSON.stringify(dataMatch)}`);
-        this.handleMatchedMessage(msg, dataMatch);
+        await this.handleMatchedMessage(msg, dataMatch);
       }
-    });
+    }
   }
 
   /**
@@ -442,10 +453,10 @@ class RadioheadAdapter extends utils.Adapter {
         if (dataMatch.numParts === 1) {
           // only one part... toggle
           const oldState = await this.getForeignStateAsync(dataMatch.objectId);
-          await this.setForeignStateAsync(dataMatch.objectId, !(oldState && oldState.val), true);
+          await this.setForeignStateAsync(dataMatch.objectId, !(oldState?.val), true);
         } else {
           // two parts ... part 0 = true, part 1 = false
-          if (dataMatch.matchedPart == 0) {
+          if (dataMatch.matchedPart === 0) {
             await this.setForeignStateAsync(dataMatch.objectId, true, true);
           } else {
             await this.setForeignStateAsync(dataMatch.objectId, false, true);
@@ -453,12 +464,12 @@ class RadioheadAdapter extends utils.Adapter {
         }
         break;
 
-      default:
+      default: {
         // check if data start is defined
         if (dataMatch.bufferDataStart < 0) return;
 
         // get the value and set the state
-        let val: number|boolean;
+        let val: number | boolean;
         if (dataMatch.type === 'boolean') {
           val = this.getValueFromBuffer(msg.data, 'uint8', dataMatch.bufferDataStart, dataMatch.objectId);
           val = !!val; // make is boolean
@@ -470,6 +481,7 @@ class RadioheadAdapter extends utils.Adapter {
           }
         }
         await this.setForeignStateAsync(dataMatch.objectId, val, true);
+      }
     }
   }
 
@@ -510,7 +522,7 @@ class RadioheadAdapter extends utils.Adapter {
     const newRetr = this.retransmissionsCountStart + this.rhs.getRetransmissions();
     if (newRetr !== this.retransmissionsCount) {
       this.retransmissionsCount = this.retransmissionsCountStart + this.rhs.getRetransmissions();
-      await this.setStateAsync('info.retransmissionsCount', this.retransmissionsCount, true);
+      await this.setState('info.retransmissionsCount', this.retransmissionsCount, true);
     }
   }
 
@@ -543,7 +555,7 @@ class RadioheadAdapter extends utils.Adapter {
           this.log.warn(`${objectId} config error! Invalid data type ${type}`);
       }
     } catch (err) {
-      this.log.warn(`${objectId} config error! Maybe there are too few byte in the buffer to read a ${type}? ` + err);
+      this.log.warn(`${objectId} config error! Maybe there are too few byte in the buffer to read a ${type}? ${err}`);
     }
     return NaN;
   }
@@ -560,26 +572,54 @@ class RadioheadAdapter extends utils.Adapter {
   private writeValueToBuffer (val: number, buf: Buffer, type: BufferDataType, start: number, objectId: string): boolean {
     try {
       switch (type) {
-        case 'int8': buf.writeInt8(val, start); break;
-        case 'uint8': buf.writeUInt8(val, start); break;
-        case 'int16_le': buf.writeInt16LE(val, start); break;
-        case 'int16_be': buf.writeInt16BE(val, start); break;
-        case 'uint16_le': buf.writeUInt16LE(val, start); break;
-        case 'uint16_be': buf.writeUInt16BE(val, start); break;
-        case 'int32_le': buf.writeInt32LE(val, start); break;
-        case 'int32_be': buf.writeInt32BE(val, start); break;
-        case 'uint32_le': buf.writeUInt32LE(val, start); break;
-        case 'uint32_be': buf.writeUInt32BE(val, start); break;
-        case 'float32_le': buf.writeFloatLE(val, start); break;
-        case 'float32_be': buf.writeFloatBE(val, start); break;
-        case 'double64_le': buf.writeDoubleLE(val, start); break;
-        case 'double64_be': buf.writeDoubleBE(val, start); break;
+        case 'int8':
+          buf.writeInt8(val, start);
+          break;
+        case 'uint8':
+          buf.writeUInt8(val, start);
+          break;
+        case 'int16_le':
+          buf.writeInt16LE(val, start);
+          break;
+        case 'int16_be':
+          buf.writeInt16BE(val, start);
+          break;
+        case 'uint16_le':
+          buf.writeUInt16LE(val, start);
+          break;
+        case 'uint16_be':
+          buf.writeUInt16BE(val, start);
+          break;
+        case 'int32_le':
+          buf.writeInt32LE(val, start);
+          break;
+        case 'int32_be':
+          buf.writeInt32BE(val, start);
+          break;
+        case 'uint32_le':
+          buf.writeUInt32LE(val, start);
+          break;
+        case 'uint32_be':
+          buf.writeUInt32BE(val, start);
+          break;
+        case 'float32_le':
+          buf.writeFloatLE(val, start);
+          break;
+        case 'float32_be':
+          buf.writeFloatBE(val, start);
+          break;
+        case 'double64_le':
+          buf.writeDoubleLE(val, start);
+          break;
+        case 'double64_be':
+          buf.writeDoubleBE(val, start);
+          break;
         default:
           this.log.warn(`${objectId} config error! Invalid data type ${type}`);
           return false;
       }
     } catch (err) {
-      this.log.warn(`${objectId} config error! Maybe there are too few byte in the buffer to write a ${type}? ` + err);
+      this.log.warn(`${objectId} config error! Maybe there are too few byte in the buffer to write a ${type}? ${err}`);
       return false;
     }
     return true;
@@ -591,7 +631,7 @@ class RadioheadAdapter extends utils.Adapter {
    * @param obj The ioBroker object.
    */
   @autobind
-  private onObjectChange(id: string, obj: ioBroker.Object | null | undefined): void {
+  private onObjectChange (id: string, obj: ioBroker.Object | null | undefined): void {
     if (obj) {
       // The object was changed
       this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
@@ -607,7 +647,7 @@ class RadioheadAdapter extends utils.Adapter {
    * @param state The ioBroker state.
    */
   @autobind
-  private async onStateChange(id: string, state: ioBroker.State | null | undefined): Promise<void> {
+  private async onStateChange (id: string, state: ioBroker.State | null | undefined): Promise<void> {
     if (state) {
       // The state was changed
       this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack}) ` + JSON.stringify(state));
@@ -617,6 +657,7 @@ class RadioheadAdapter extends utils.Adapter {
       if (state.ack === true || !this.rhs) return;
 
       // handle special states
+      // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
       switch (id) {
         case this.namespace + '.actions.resetCounters':
           this.log.info('Reset information counters');
@@ -626,15 +667,15 @@ class RadioheadAdapter extends utils.Adapter {
 
           for (const infoCounterId of infoCounters) {
             this[infoCounterId] = 0;
-            await this.setStateAsync('info.' + infoCounterId, 0, true);
+            await this.setState('info.' + infoCounterId, 0, true);
           }
 
-          await this.setStateAsync(id, state, true);
+          await this.setState(id, state, true);
           return;
       }
 
       // is this some outgoing data?
-      if (this.outgoingMatches.hasOwnProperty(id)) {
+      if (Object.prototype.hasOwnProperty.call(this.outgoingMatches, id)) {
         // prepare the data for sending
         let buf: Buffer | null = null;
         switch (this.outgoingMatches[id].role) {
@@ -643,12 +684,13 @@ class RadioheadAdapter extends utils.Adapter {
             // switch or indicator uses the second data group for false value if provied
             if (this.outgoingMatches[id].data.length > 1 && !state.val) {
               // send false
-              buf = Buffer.from(this.outgoingMatches[id].data[1]) // copy the configured buffer to prevent issues
+              buf = Buffer.from(this.outgoingMatches[id].data[1]); // copy the configured buffer to prevent issues
               break;
             }
 
+          // eslint-disable-next-line no-fallthrough
           default:
-            buf = Buffer.from(this.outgoingMatches[id].data[0]) // copy the configured buffer to prevent issues
+            buf = Buffer.from(this.outgoingMatches[id].data[0]); // copy the configured buffer to prevent issues
         }
 
         // if there is a data start defined ...
@@ -683,33 +725,33 @@ class RadioheadAdapter extends utils.Adapter {
    */
   @autobind
   private async rhsSend (to: number, buf: Buffer, sendingObjectId: string, stateAck?: ioBroker.State): Promise<Error | undefined> {
-    if (!this.rhs || !this.rhs.isInitDone()) {
+    if (!this.rhs?.isInitDone()) {
       this.log.warn(`Unable to send new value of '${sendingObjectId}' because we are not ready to send`);
-      return Promise.resolve(new Error('Unable to send, not ready'));
+      return new Error('Unable to send, not ready');
     }
 
     if (this.config.logAllData) {
       this.log.info(`Sending <${formatBufferAsHexString(buf)}> to ${hexNumber(to)}`);
     }
 
-    let err: Error | undefined = undefined;
+    let err: Error | undefined;
     await this.rhs.send(to, buf)
       .then(() => {
         // update ok info
-        this.setStateAsync('info.sentOkCount', ++this.sentOkCount, true);
-        this.setStateAsync('info.lastSentOk', new Date().toISOString(), true);
+        void this.setState('info.sentOkCount', ++this.sentOkCount, true);
+        void this.setState('info.lastSentOk', new Date().toISOString(), true);
 
         // set the ack flag
         if (stateAck) {
-          this.setStateAsync(sendingObjectId, stateAck, true);
+          void this.setState(sendingObjectId, stateAck, true);
         }
       })
       .catch((e) => {
         // update error info
-        this.setStateAsync('info.sentErrorCount', ++this.sentErrorCount, true);
-        this.setStateAsync('info.lastSentError', new Date().toISOString(), true);
+        void this.setState('info.sentErrorCount', ++this.sentErrorCount, true);
+        void this.setState('info.lastSentError', new Date().toISOString(), true);
         this.log.warn(`Error sending message for ${sendingObjectId} to ${hexNumber(to)} - ${e}`);
-        err = e;
+        err = e as Error;
       })
       // in any case update the retransmissions counter
       .then(() => this.updateRetransmissionsCount());
@@ -722,7 +764,7 @@ class RadioheadAdapter extends utils.Adapter {
    * @param obj The received ioBroker message.
    */
   @autobind
-  private onMessage(obj: ioBroker.Message): void {
+  private onMessage (obj: ioBroker.Message): void {
     this.log.debug('got message ' + JSON.stringify(obj));
 
     if (typeof obj === 'object' && obj.message) {
@@ -739,7 +781,7 @@ class RadioheadAdapter extends utils.Adapter {
         let buf: Buffer | null;
         try {
           buf = Buffer.from(payload.data as []);
-        } catch (e) {
+        } catch (_err) {
           buf = null;
         }
 
@@ -748,11 +790,11 @@ class RadioheadAdapter extends utils.Adapter {
           return;
         }
 
-        this.rhsSend(to, buf, obj.from)
+        void this.rhsSend(to, buf, obj.from)
           .then((error) => {
             // Send response in callback if required
             if (obj.callback) {
-              this.sendTo(obj.from, obj.command, {error: error}, obj.callback);
+              this.sendTo(obj.from, obj.command, { error: error }, obj.callback);
             }
           });
       }
