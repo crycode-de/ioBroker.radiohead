@@ -258,7 +258,7 @@ class RadioheadAdapter extends utils.Adapter {
     try {
       this.reopenPortOnClose = false;
       if (this.rhsInitRetryTimeout) {
-        clearTimeout(this.rhsInitRetryTimeout);
+        this.clearTimeout(this.rhsInitRetryTimeout);
         this.rhsInitRetryTimeout = null;
       }
       if (this.rhs !== null) {

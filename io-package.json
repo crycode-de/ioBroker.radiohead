@@ -1,357 +1,357 @@
 {
-    "common": {
-        "name": "radiohead",
-        "version": "1.3.0",
-        "news": {
-            "1.3.0": {
-                "en": "Handling of serialport close events, Try to reinit on serialport open errors",
-                "de": "Close-Events der seriellen Schnittstelle werden nun erkannt und lösen einen Re-Init aus, Schnittstellenfehler beim Adapterstart lösen nun ebenfalls einen Re-Init aus",
-                "ru": "Обработка событий закрытия последовательного порта, попытка перезагрузки при ошибках открытия последовательного порта",
-                "pt": "Tratamento de eventos de fechamento de porta serial, tente reinicializar em erros de abertura de porta serial",
-                "nl": "Afhandeling van gebeurtenissen voor het sluiten van seriële poorten, probeer opnieuw te starten bij open fouten van seriële poorten",
-                "fr": "Gestion des événements de fermeture du port série, essayez de réinitialiser sur les erreurs d'ouverture du port série",
-                "it": "Gestione degli eventi di chiusura della porta seriale, prova a ripristinare gli errori di apertura della porta seriale",
-                "es": "Manejo de eventos de cierre de puerto serie, intente reiniciar en errores de apertura de puerto serie",
-                "pl": "Obsługa zdarzeń zamknięcia portu szeregowego, spróbuj ponownie uruchomić przy błędach otwarcia portu szeregowego",
-                "zh-cn": "处理串口关闭事件，尝试重新初始化串口打开错误",
-                "uk": "Обробка подій закриття послідовного порту, спроба повторного запуску під час помилок відкриття послідовного порту"
-            },
-            "1.2.0": {
-                "en": "Use stringified json for data.incoming state",
-                "de": "Verwenden Sie stringified json für data.incoming state",
-                "ru": "Используйте строковый json для состояния data.incoming",
-                "pt": "Use json stringificado para o estado data.incoming",
-                "nl": "Gebruik stringified json voor data.incoming state",
-                "fr": "Utiliser json stringified pour l'état data.incoming",
-                "it": "Usa json stringato per lo stato data.incoming",
-                "es": "Utilice json en cadena para el estado de entrada de datos",
-                "pl": "Użyj stringified json dla stanu data.incoming",
-                "zh-cn": "将字符串化的 json 用于 data.incoming 状态",
-                "uk": "Використовуйте stringified json для стану data.incoming"
-            },
-            "1.1.1": {
-                "en": "Small fixes",
-                "de": "Kleine Korrekturen",
-                "ru": "Небольшие исправления",
-                "pt": "Pequenas correções",
-                "nl": "Kleine reparaties",
-                "fr": "Petits correctifs",
-                "it": "Piccole correzioni",
-                "es": "Pequeñas correcciones",
-                "pl": "Małe poprawki",
-                "zh-cn": "小修正",
-                "uk": "Невеликі виправлення"
-            },
-            "1.1.0": {
-                "en": "Added Sentry, Updated dependencies",
-                "de": "Sentry hinzugefügt, Abhängigkeiten aktualisiert",
-                "ru": "Добавлен Sentry, обновлены зависимости",
-                "pt": "Adicionado Sentry, Dependências atualizadas",
-                "nl": "Sentry toegevoegd, bijgewerkte afhankelijkheden",
-                "fr": "Sentry ajoutée, dépendances mises à jour",
-                "it": "Sentinella aggiunta, dipendenze aggiornate",
-                "es": "Centinela agregado, dependencias actualizadas",
-                "pl": "Dodano Działko, Zaktualizowano zależności",
-                "zh-cn": "添加了哨兵，更新了依赖项",
-                "uk": "Додано Sentry, оновлено залежності"
-            },
-            "1.0.7": {
-                "en": "Fixed bug on deleting incoming data entries.",
-                "de": "Fehler beim Löschen eine Eintrags eingehender Daten behoben.",
-                "ru": "Исправлена ошибка удаления входящих данных.",
-                "pt": "Corrigido o erro ao excluir entradas de dados recebidas.",
-                "nl": "Bug opgelost bij het verwijderen van inkomende gegevensinvoer.",
-                "fr": "Correction d'un bug sur la suppression des entrées de données entrantes.",
-                "it": "Corretto errore nell'eliminazione delle voci di dati in arrivo.",
-                "es": "Se corrigió un error al eliminar las entradas de datos entrantes.",
-                "pl": "Naprawiono błąd usuwania wpisów danych przychodzących.",
-                "zh-cn": "修复了删除传入数据条目的错误。",
-                "uk": "Виправлена ​​помилка видалення вхідних даних."
-            },
-            "1.0.5": {
-                "en": "Fixed bug in grouping in/out data. Added missing translations. Fixed bug with promiscuous mode. Updated dependencies.",
-                "de": "Fehler beim Gruppieren von In/Out-Daten behoben. Fehlende Übersetzungen hinzugefügt. Fehler im Promiscuous-Modus behoben. Abhängigkeiten aktualisiert.",
-                "ru": "Исправлена ошибка в группировке входных / выходных данных. Добавлены недостающие переводы. Исправлена ошибка с неразборчивым режимом. Обновлены зависимости.",
-                "pt": "Corrigido erro no agrupamento de dados de entrada e saída. Adicionadas traduções ausentes. Corrigido o erro no modo promíscuo. Dependências atualizadas.",
-                "nl": "Bug opgelost bij het groeperen van in / uit gegevens. Ontbrekende vertalingen toegevoegd. Bug opgelost met promiscue modus. Bijgewerkte afhankelijkheden.",
-                "fr": "Correction d'un bug dans le regroupement des données d'entrée / sortie. Ajout de traductions manquantes. Correction d'un bug avec le mode promiscuous. Dépendances mises à jour.",
-                "it": "Corretto errore nel raggruppamento dei dati in / out. Aggiunte traduzioni mancanti. Bug risolto con modalità promiscua. Dipendenze aggiornate.",
-                "es": "Se corrigió un error en la agrupación de datos de entrada / salida. Se agregaron traducciones faltantes. Error corregido con el modo promiscuo. Dependencias actualizadas.",
-                "pl": "Naprawiono błąd w grupowaniu danych we / wy. Dodano brakujące tłumaczenia. Naprawiono błąd w trybie rozwiązanym. Zaktualizowano zależności.",
-                "zh-cn": "修复了分组输入/输出数据的错误。添加了缺少的翻译。修复了混杂模式下的错误。更新了依赖性。",
-                "uk": "Виправлена ​​помилка групування вхідних/вихідних даних. Додано відсутні переклади. Виправлена ​​помилка з безладним статевим життям. Оновлені залежності."
-            },
-            "1.0.4": {
-                "en": "Updated connectionType and dataSource in io-package.json",
-                "de": "connectionType und dataSource in io-package.json aktualisiert",
-                "ru": "Обновлен тип соединения и источник данных в io-package.json",
-                "pt": "ConnectionType e dataSource atualizados em io-package.json",
-                "nl": "Bijgewerkt verbindingstype en gegevensbron in io-pakket.json",
-                "fr": "ConnectionType et dataSource mis à jour dans io-package.json",
-                "it": "Tipo di connessione e dataSource aggiornati in io-package.json",
-                "es": "ConnectionType y dataSource actualizados en io-package.json",
-                "pl": "Zaktualizowano typ połączenia i źródło danych w io-package.json",
-                "zh-cn": "更新了io-package.json中的connectionType和dataSource",
-                "uk": "Оновлено ConnectionType і dataSource в io-package.json"
-            }
-        },
-        "titleLang": {
-            "en": "RadioHead",
-            "de": "RadioHead",
-            "ru": "RadioHead",
-            "pt": "RadioHead",
-            "nl": "RadioHead",
-            "fr": "RadioHead",
-            "it": "RadioHead",
-            "es": "RadioHead",
-            "pl": "RadioHead",
-            "zh-cn": "RadioHead",
-            "uk": "RadioHead"
-        },
-        "desc": {
-            "en": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
-            "de": "Dies ist ein ioBroker-Adapter zur Integration eines RadioHead-Netzwerks über eine serielle Schnittstelle.",
-            "ru": "Это адаптер ioBroker для интеграции сети RadioHead с использованием последовательного интерфейса.",
-            "pt": "Este é um adaptador ioBroker para integrar uma rede RadioHead usando uma interface serial.",
-            "nl": "Dit is een ioBroker-adapter om een ​​RadioHead-netwerk te integreren met behulp van een seriële interface.",
-            "fr": "Il s'agit d'un adaptateur ioBroker permettant d'intégrer un réseau RadioHead utilisant une interface série.",
-            "it": "Questo è un adattatore ioBroker per integrare una rete RadioHead utilizzando un'interfaccia seriale.",
-            "es": "Este es un ioBroker-Adapter para integrar una red RadioHead usando una interfaz serial.",
-            "pl": "Jest to adapter ioBroker do integracji sieci RadioHead za pomocą interfejsu szeregowego.",
-            "zh-cn": "这是一个使用串行接口集成RadioHead网络的ioBroker-Adapter。",
-            "uk": "Це ioBroker-адаптер для інтеграції мережі RadioHead за допомогою послідовного інтерфейсу."
-        },
-        "docs": {
-            "en": "docs/en/radiohead.md",
-            "de": "docs/de/radiohead.md"
-        },
-        "authors": [
-            "Peter Müller <peter@crycode.de>"
-        ],
-        "keywords": [
-            "radiohead",
-            "serial",
-            "wireless",
-            "RHSerial",
-            "RHDatagram",
-            "RHReliableDatagram"
-        ],
-        "licenseInformation": {
-            "license": "GPL-2.0-only",
-            "type": "free"
-        },
-        "platform": "Javascript/Node.js",
-        "icon": "radiohead.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/crycode-de/ioBroker.radiohead/master/admin/radiohead.png",
-        "readme": "https://github.com/crycode-de/ioBroker.radiohead/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "protocols",
-        "connectionType": "local",
-        "dataSource": "push",
-        "tier": 3,
-        "adminUI": {
-            "config": "html"
-        },
-        "compact": true,
-        "messagebox": true,
-        "dependencies": [
-            {
-                "js-controller": ">=6.0.11"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=7.6.17"
-            }
-        ],
-        "plugins": {
-            "sentry": {
-                "dsn": "https://4c43bdc7394040c8851d3e12400a53b0@glitchtip.crymg.de/5"
-            }
-        }
+  "common": {
+    "name": "radiohead",
+    "version": "1.4.0",
+    "news": {
+      "1.4.0": {
+        "en": "Node.js >= 20, js-controller >= 6.0.11, Admin >= 7.6.17 required\nUpdated to latest ioBroker adapter toolset\nUpdated dependencies and fixed resulting issues\nUpdated Sentry DSN",
+        "de": "Node.js >= 20, js-controller >= 6.0.11, Admin >= 7.6.17 erforderlich\nAktualisiert auf das aktuelle ioBroker-Adapter-Toolset\nAbhängigkeiten aktualisiert und Folgeprobleme behoben\nAktualisierte Sentry DSN",
+        "ru": "Node.js >= 20, js-контроллер >= 6.0.11, администратор >= 7.6.17 требуется\nОбновлено до последнего набора инструментов адаптера ioBroker\nОбновленные зависимости и исправленные возникающие проблемы\nОбновленный Sentry DSN",
+        "pt": "Node.js >= 20, js-controlador >= 6.0,11, Admin >= 7.6.17 necessário\nAtualizado para o mais recente ioBroker adaptador toolset\nDependências atualizadas e problemas resultantes fixos\nAtualizado Sentry DSN",
+        "nl": "Voor de toepassing van deze onderverdeling wordt verstaan onder:\nBijgewerkt naar de nieuwste ioBroker adapter toolset\nBijgewerkte afhankelijkheden en vaste resulterende problemen\nBijgewerkt Sentry DSN",
+        "fr": "Node.js >= 20, js-controller >= 6.0.11, Admin >= 7.6.17 requis\nMise à jour au dernier outil d'adaptateur ioBroker\nDépendances actualisées et problèmes fixes résultants\nMise à jour de la déclaration DSN",
+        "it": "Node.js >= 20, js-controller >= 6.0.11, Admin >= 7.6.17 richiesto\nAggiornato agli ultimi strumenti di adattatore ioBroker\nDipendenze aggiornate e problemi risultanti fissi\nAggiornato Sentry DSN",
+        "es": "Node.js \"= 20, js-controller \"= 6.0.11, Admin \"= 7.6.17 requerido\nActualizado a la última herramienta de adaptador ioBroker\nActualización de las dependencias y cuestiones resultantes fijas\nActualizado Sentry DSN",
+        "pl": "Node.js > = 20, js- controller > = 6.0.11, Admin > = 7.6.17 wymagane\nAktualizacja do najnowszego zestawu narzędzi adaptera joBroker\nZaktualizowane zależności i stałe wynikające z nich emisje\nAktualizacja Sentry DSN",
+        "uk": "JavaScript licenses API Веб-сайт Go1.13.8\nОновлено до останнього ioBroker адаптера\nОновлені залежності та виправлені проблеми\nОновлена Sentry DSN",
+        "zh-cn": "节点.js >= 20,js控制器 >= 6.0.11, 管理员 >= 7.6.17 需要\n更新到最新的 ioBroker 适配工具集\n更新的依赖性和由此产生的固定问题\n更新的哨兵 DSN"
+      },
+      "1.3.0": {
+        "en": "Handling of serialport close events, Try to reinit on serialport open errors",
+        "de": "Close-Events der seriellen Schnittstelle werden nun erkannt und lösen einen Re-Init aus, Schnittstellenfehler beim Adapterstart lösen nun ebenfalls einen Re-Init aus",
+        "ru": "Обработка событий закрытия последовательного порта, попытка перезагрузки при ошибках открытия последовательного порта",
+        "pt": "Tratamento de eventos de fechamento de porta serial, tente reinicializar em erros de abertura de porta serial",
+        "nl": "Afhandeling van gebeurtenissen voor het sluiten van seriële poorten, probeer opnieuw te starten bij open fouten van seriële poorten",
+        "fr": "Gestion des événements de fermeture du port série, essayez de réinitialiser sur les erreurs d'ouverture du port série",
+        "it": "Gestione degli eventi di chiusura della porta seriale, prova a ripristinare gli errori di apertura della porta seriale",
+        "es": "Manejo de eventos de cierre de puerto serie, intente reiniciar en errores de apertura de puerto serie",
+        "pl": "Obsługa zdarzeń zamknięcia portu szeregowego, spróbuj ponownie uruchomić przy błędach otwarcia portu szeregowego",
+        "zh-cn": "处理串口关闭事件，尝试重新初始化串口打开错误",
+        "uk": "Обробка подій закриття послідовного порту, спроба повторного запуску під час помилок відкриття послідовного порту"
+      },
+      "1.2.0": {
+        "en": "Use stringified json for data.incoming state",
+        "de": "Verwenden Sie stringified json für data.incoming state",
+        "ru": "Используйте строковый json для состояния data.incoming",
+        "pt": "Use json stringificado para o estado data.incoming",
+        "nl": "Gebruik stringified json voor data.incoming state",
+        "fr": "Utiliser json stringified pour l'état data.incoming",
+        "it": "Usa json stringato per lo stato data.incoming",
+        "es": "Utilice json en cadena para el estado de entrada de datos",
+        "pl": "Użyj stringified json dla stanu data.incoming",
+        "zh-cn": "将字符串化的 json 用于 data.incoming 状态",
+        "uk": "Використовуйте stringified json для стану data.incoming"
+      },
+      "1.1.1": {
+        "en": "Small fixes",
+        "de": "Kleine Korrekturen",
+        "ru": "Небольшие исправления",
+        "pt": "Pequenas correções",
+        "nl": "Kleine reparaties",
+        "fr": "Petits correctifs",
+        "it": "Piccole correzioni",
+        "es": "Pequeñas correcciones",
+        "pl": "Małe poprawki",
+        "zh-cn": "小修正",
+        "uk": "Невеликі виправлення"
+      },
+      "1.1.0": {
+        "en": "Added Sentry, Updated dependencies",
+        "de": "Sentry hinzugefügt, Abhängigkeiten aktualisiert",
+        "ru": "Добавлен Sentry, обновлены зависимости",
+        "pt": "Adicionado Sentry, Dependências atualizadas",
+        "nl": "Sentry toegevoegd, bijgewerkte afhankelijkheden",
+        "fr": "Sentry ajoutée, dépendances mises à jour",
+        "it": "Sentinella aggiunta, dipendenze aggiornate",
+        "es": "Centinela agregado, dependencias actualizadas",
+        "pl": "Dodano Działko, Zaktualizowano zależności",
+        "zh-cn": "添加了哨兵，更新了依赖项",
+        "uk": "Додано Sentry, оновлено залежності"
+      },
+      "1.0.7": {
+        "en": "Fixed bug on deleting incoming data entries.",
+        "de": "Fehler beim Löschen eine Eintrags eingehender Daten behoben.",
+        "ru": "Исправлена ошибка удаления входящих данных.",
+        "pt": "Corrigido o erro ao excluir entradas de dados recebidas.",
+        "nl": "Bug opgelost bij het verwijderen van inkomende gegevensinvoer.",
+        "fr": "Correction d'un bug sur la suppression des entrées de données entrantes.",
+        "it": "Corretto errore nell'eliminazione delle voci di dati in arrivo.",
+        "es": "Se corrigió un error al eliminar las entradas de datos entrantes.",
+        "pl": "Naprawiono błąd usuwania wpisów danych przychodzących.",
+        "zh-cn": "修复了删除传入数据条目的错误。",
+        "uk": "Виправлена ​​помилка видалення вхідних даних."
+      },
+      "1.0.5": {
+        "en": "Fixed bug in grouping in/out data. Added missing translations. Fixed bug with promiscuous mode. Updated dependencies.",
+        "de": "Fehler beim Gruppieren von In/Out-Daten behoben. Fehlende Übersetzungen hinzugefügt. Fehler im Promiscuous-Modus behoben. Abhängigkeiten aktualisiert.",
+        "ru": "Исправлена ошибка в группировке входных / выходных данных. Добавлены недостающие переводы. Исправлена ошибка с неразборчивым режимом. Обновлены зависимости.",
+        "pt": "Corrigido erro no agrupamento de dados de entrada e saída. Adicionadas traduções ausentes. Corrigido o erro no modo promíscuo. Dependências atualizadas.",
+        "nl": "Bug opgelost bij het groeperen van in / uit gegevens. Ontbrekende vertalingen toegevoegd. Bug opgelost met promiscue modus. Bijgewerkte afhankelijkheden.",
+        "fr": "Correction d'un bug dans le regroupement des données d'entrée / sortie. Ajout de traductions manquantes. Correction d'un bug avec le mode promiscuous. Dépendances mises à jour.",
+        "it": "Corretto errore nel raggruppamento dei dati in / out. Aggiunte traduzioni mancanti. Bug risolto con modalità promiscua. Dipendenze aggiornate.",
+        "es": "Se corrigió un error en la agrupación de datos de entrada / salida. Se agregaron traducciones faltantes. Error corregido con el modo promiscuo. Dependencias actualizadas.",
+        "pl": "Naprawiono błąd w grupowaniu danych we / wy. Dodano brakujące tłumaczenia. Naprawiono błąd w trybie rozwiązanym. Zaktualizowano zależności.",
+        "zh-cn": "修复了分组输入/输出数据的错误。添加了缺少的翻译。修复了混杂模式下的错误。更新了依赖性。",
+        "uk": "Виправлена ​​помилка групування вхідних/вихідних даних. Додано відсутні переклади. Виправлена ​​помилка з безладним статевим життям. Оновлені залежності."
+      }
     },
-    "native": {
-        "port": "",
-        "baud": 9600,
-        "address": "0x01",
-        "reliable": true,
-        "retries": 3,
-        "timeout": 200,
-        "promiscuous": false,
-        "debug": false
+    "titleLang": {
+      "en": "RadioHead",
+      "de": "RadioHead",
+      "ru": "RadioHead",
+      "pt": "RadioHead",
+      "nl": "RadioHead",
+      "fr": "RadioHead",
+      "it": "RadioHead",
+      "es": "RadioHead",
+      "pl": "RadioHead",
+      "zh-cn": "RadioHead",
+      "uk": "RadioHead"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Serial port opened",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.sentOkCount",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "Count of successfully sent messages",
-                "type": "number",
-                "read": true,
-                "write": false,
-                "def": 0
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.sentErrorCount",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "Count of faulty sent messages",
-                "type": "number",
-                "read": true,
-                "write": false,
-                "def": 0
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.receivedCount",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "Count of received message",
-                "type": "number",
-                "read": true,
-                "write": false,
-                "def": 0
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.retransmissionsCount",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "Count of retransmitted messages",
-                "type": "number",
-                "read": true,
-                "write": false,
-                "def": 0
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.lastSentOk",
-            "type": "state",
-            "common": {
-                "role": "value.datetime",
-                "name": "Timestamp when the last message was successfully sent",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.lastSentError",
-            "type": "state",
-            "common": {
-                "role": "value.datetime",
-                "name": "Timestamp when the last message was faulty sent",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.lastReceived",
-            "type": "state",
-            "common": {
-                "role": "value.datetime",
-                "name": "Timestamp when the last message was received",
-                "type": "string",
-                "read": true,
-                "write": false,
-                "def": ""
-            },
-            "native": {}
-        },
-        {
-            "_id": "actions",
-            "type": "channel",
-            "common": {
-                "name": "Actions"
-            },
-            "native": {}
-        },
-        {
-            "_id": "actions.resetCounters",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Reset the information counters",
-                "type": "boolean",
-                "read": false,
-                "write": true,
-                "def": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "data",
-            "type": "device",
-            "common": {
-                "name": "The data"
-            },
-            "native": {}
-        },
-        {
-            "_id": "data.in",
-            "type": "channel",
-            "common": {
-                "name": "Incomming data"
-            },
-            "native": {}
-        },
-        {
-            "_id": "data.out",
-            "type": "channel",
-            "common": {
-                "name": "Outgoing data"
-            },
-            "native": {}
-        },
-        {
-            "_id": "data.incoming",
-            "type": "state",
-            "common": {
-                "role": "state",
-                "name": "Last received RadioHead message",
-                "type": "object",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        }
-    ]
+    "desc": {
+      "en": "This is an ioBroker-Adapter to integrate a RadioHead network using a serial interface.",
+      "de": "Dies ist ein ioBroker-Adapter zur Integration eines RadioHead-Netzwerks über eine serielle Schnittstelle.",
+      "ru": "Это адаптер ioBroker для интеграции сети RadioHead с использованием последовательного интерфейса.",
+      "pt": "Este é um adaptador ioBroker para integrar uma rede RadioHead usando uma interface serial.",
+      "nl": "Dit is een ioBroker-adapter om een ​​RadioHead-netwerk te integreren met behulp van een seriële interface.",
+      "fr": "Il s'agit d'un adaptateur ioBroker permettant d'intégrer un réseau RadioHead utilisant une interface série.",
+      "it": "Questo è un adattatore ioBroker per integrare una rete RadioHead utilizzando un'interfaccia seriale.",
+      "es": "Este es un ioBroker-Adapter para integrar una red RadioHead usando una interfaz serial.",
+      "pl": "Jest to adapter ioBroker do integracji sieci RadioHead za pomocą interfejsu szeregowego.",
+      "zh-cn": "这是一个使用串行接口集成RadioHead网络的ioBroker-Adapter。",
+      "uk": "Це ioBroker-адаптер для інтеграції мережі RadioHead за допомогою послідовного інтерфейсу."
+    },
+    "docs": {
+      "en": "docs/en/radiohead.md",
+      "de": "docs/de/radiohead.md"
+    },
+    "authors": [
+      "Peter Müller <peter@crycode.de>"
+    ],
+    "keywords": [
+      "radiohead",
+      "serial",
+      "wireless",
+      "RHSerial",
+      "RHDatagram",
+      "RHReliableDatagram"
+    ],
+    "licenseInformation": {
+      "license": "GPL-2.0-only",
+      "type": "free"
+    },
+    "platform": "Javascript/Node.js",
+    "icon": "radiohead.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/crycode-de/ioBroker.radiohead/master/admin/radiohead.png",
+    "readme": "https://github.com/crycode-de/ioBroker.radiohead/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "protocols",
+    "connectionType": "local",
+    "dataSource": "push",
+    "tier": 3,
+    "adminUI": {
+      "config": "html"
+    },
+    "compact": true,
+    "messagebox": true,
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=7.6.17"
+      }
+    ],
+    "plugins": {
+      "sentry": {
+        "dsn": "https://4c43bdc7394040c8851d3e12400a53b0@glitchtip.crymg.de/5"
+      }
+    }
+  },
+  "native": {
+    "port": "",
+    "baud": 9600,
+    "address": "0x01",
+    "reliable": true,
+    "retries": 3,
+    "timeout": 200,
+    "promiscuous": false,
+    "debug": false
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Serial port opened",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.sentOkCount",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Count of successfully sent messages",
+        "type": "number",
+        "read": true,
+        "write": false,
+        "def": 0
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.sentErrorCount",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Count of faulty sent messages",
+        "type": "number",
+        "read": true,
+        "write": false,
+        "def": 0
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.receivedCount",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Count of received message",
+        "type": "number",
+        "read": true,
+        "write": false,
+        "def": 0
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.retransmissionsCount",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "Count of retransmitted messages",
+        "type": "number",
+        "read": true,
+        "write": false,
+        "def": 0
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.lastSentOk",
+      "type": "state",
+      "common": {
+        "role": "value.datetime",
+        "name": "Timestamp when the last message was successfully sent",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.lastSentError",
+      "type": "state",
+      "common": {
+        "role": "value.datetime",
+        "name": "Timestamp when the last message was faulty sent",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.lastReceived",
+      "type": "state",
+      "common": {
+        "role": "value.datetime",
+        "name": "Timestamp when the last message was received",
+        "type": "string",
+        "read": true,
+        "write": false,
+        "def": ""
+      },
+      "native": {}
+    },
+    {
+      "_id": "actions",
+      "type": "channel",
+      "common": {
+        "name": "Actions"
+      },
+      "native": {}
+    },
+    {
+      "_id": "actions.resetCounters",
+      "type": "state",
+      "common": {
+        "role": "button",
+        "name": "Reset the information counters",
+        "type": "boolean",
+        "read": false,
+        "write": true,
+        "def": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "data",
+      "type": "device",
+      "common": {
+        "name": "The data"
+      },
+      "native": {}
+    },
+    {
+      "_id": "data.in",
+      "type": "channel",
+      "common": {
+        "name": "Incomming data"
+      },
+      "native": {}
+    },
+    {
+      "_id": "data.out",
+      "type": "channel",
+      "common": {
+        "name": "Outgoing data"
+      },
+      "native": {}
+    },
+    {
+      "_id": "data.incoming",
+      "type": "state",
+      "common": {
+        "role": "state",
+        "name": "Last received RadioHead message",
+        "type": "object",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    }
+  ]
 }
