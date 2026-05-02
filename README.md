@@ -36,6 +36,9 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22 now
+
 ### 1.4.0 (2025-11-01)
 
 * (crycode-de) Node.js >= 20, js-controller >= 6.0.11, Admin >= 7.6.17 required
