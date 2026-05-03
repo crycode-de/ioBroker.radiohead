@@ -101,6 +101,8 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 
 * (crycode-de) initial release
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 
 GNU General Public License Version 2
