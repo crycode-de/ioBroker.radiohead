@@ -23,7 +23,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.3.2",
+    "@iobroker/adapter-core": "^3.4.3",
     "core-decorators": "^0.20.0",
     "radiohead-serial": "^6.0.1"
   },
