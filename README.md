@@ -32,6 +32,9 @@ Dies ist ein ioBroker-Adapter zur Integration eines RadioHead Netzwerkes über e
 **This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
 
 ## Changelog
+
+### **WORK IN PROGRESS**
+- (iobroker-bot) Adapter requires node.js >= 22 now.
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
